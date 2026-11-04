@@ -73,8 +73,10 @@ def mark_image(name: str):
 async def start_sweep(request: Request, photo: UploadFile = File(...), client: str = Form(...),
                       notes: str = Form(""), goods: str = Form(""), jurisdictions: str = Form(""),
                       demo: str = Form("")):
-    _check_token(request)
     registry.client(client)
+    fixture_for = load_fixture(demo) if demo else None
+    if not fixture_for:  # replaying a recorded demo costs nothing; a new photo on a public host needs the operator token
+        _check_token(request)
     tmpdir = config.data_dir() / "incoming"
     tmpdir.mkdir(parents=True, exist_ok=True)
     suffix = Path(photo.filename or "photo.jpg").suffix.lower() or ".jpg"
@@ -89,7 +91,7 @@ async def start_sweep(request: Request, photo: UploadFile = File(...), client: s
                 fh.close(); tmp.unlink(missing_ok=True)
                 raise HTTPException(413, "photo over 12 MB")
             fh.write(chunk)
-    fixture = load_fixture(demo) if (demo and (config.fixture_mode() or demo)) else None
+    fixture = fixture_for
     if config.fixture_mode() and not fixture:
         raise HTTPException(503, "no MODEL_API_KEY on this host; run one of the recorded demo sweeps")
     job_id = uuid.uuid4().hex[:10]
