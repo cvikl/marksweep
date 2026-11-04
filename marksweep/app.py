@@ -150,6 +150,7 @@ def sweep_page(sweep_id: str):
     return (STATIC / "record.html").read_text(encoding="utf-8")
 
 
+app.mount("/static/demos", StaticFiles(directory=str(config.fixtures_dir() / "demos")), name="demos")
 app.mount("/static", StaticFiles(directory=str(STATIC)), name="static")
 
 

@@ -7,11 +7,12 @@ a hashed evidence record with crops, rationales and a ledger of every model call
 
 Two model routes, chosen by configuration:
 
-- **Open weights, on the investigator's own machine (what the demo runs).** Muse Glimmer 30B (Apache 2.0,
-  `meta-models/Muse-Glimmer-30B-GGUF`) served by llama.cpp on a laptop CPU does both jobs: grounding (boxes for every
-  mark in the photo) and assessment. Client photos never leave the firm. `scripts/glimmer-server.sh`.
-- **Meta Model API.** SAM 3.1 for segmentation with lossless masks and Muse Spark 1.3 for assessment, `MARKSWEEP_SEGMENTER=sam`
-  and the default base URL. Same code, same record format.
+- **Meta Model API (what the demo runs).** SAM 3.1 for segmentation with lossless masks and Muse Spark 1.3 for the
+  assessment. The four recorded demo sweeps below took 3 min 33 s end to end for 34 model calls.
+- **Open weights, on the investigator's own machine.** Muse Glimmer 30B (Apache 2.0, `meta-models/Muse-Glimmer-30B-GGUF`)
+  served by llama.cpp on a laptop CPU does both jobs: grounding (boxes for every mark in the photo) and assessment.
+  Client photos never leave the firm. Tested on 4 Nov on a Ryzen 7 4800H: it works, at about 2 tokens per second,
+  so one photo takes 15 to 25 minutes. `scripts/glimmer-server.sh`, `MARKSWEEP_SEGMENTER=vlm`.
 
 Built for the [Meta Global AI Developer Hackathon](https://cerebralvalley.ai/e/meta-ai-developer-hackathon) (Cerebral
 Valley, 26 Oct to 4 Nov 2026), Startups track, theme Build for Your World. Live: https://meta.vantapointlabs.com
@@ -74,6 +75,20 @@ Reused from before the hackathon, and labelled here: the six dimension names and
 Sabel v Puma line, also used in Signum), and the office drawings of eight publicly registered marks (LEGO Juris A/S and
 Louis Vuitton Malletier; `fixtures/marks/`, numbers verified on the office registers in Aug 2026) that stand in for the
 demo clients' portfolios. No Signum code is included.
+
+## Limits and speed
+
+| | Meta Model API route | Local Muse Glimmer route |
+|---|---|---|
+| Segmentation | 3 SAM 3.1 calls per photo, 2 to 6 s each | 1 grounding call per photo, about 5 min |
+| Assessment | 1 Muse Spark call per element, 9 to 13 s each (about 2,200 prompt tokens with the register drawings) | 1 call per element, 3 to 5 min |
+| Photo size | up to 12 MB per upload; SAM sees the full photo, Muse Spark the padded crops | photo downscaled to 768 px before the model |
+| Elements per photo | capped by `MARKSWEEP_MAX_ELEMENTS` (6 in the demo), largest boxes first | same, 3 in the test run |
+| Photos per sweep | one; a market walk is one sweep per photo, run in sequence | same |
+| Video | not yet; SAM 3.1 tracks objects across frames and the parser supports it, the pipeline does not | no |
+| Reasoning | Muse Spark at `reasoning_effort: low`, 3,000-token budget per assessment | thinking channel prefilled and closed, direct JSON |
+
+A new sweep on the public host needs the operator token (`?token=`); the recorded demos replay without it.
 
 ## Honesty statements
 

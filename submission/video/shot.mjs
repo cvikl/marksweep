@@ -20,6 +20,11 @@ for (const s of shots) {
     if (step.type) { await page.type(step.type[0], step.type[1], { delay: 20 }); }
     await sleep(step.wait ?? 800);
   }
+  // grow the viewport to the whole page so every image is decoded before the capture
+  const fullH = await page.evaluate(() => document.documentElement.scrollHeight);
+  await page.setViewport({ width: 1920, height: Math.min(fullH, 6000), deviceScaleFactor: 1 });
+  await page.evaluate(async () => { await Promise.all([...document.images].map((i) => i.decode().catch(() => {}))); });
+  await sleep(1200);
   await page.screenshot({ path: OUT + s.name + '.png', fullPage: s.full ?? true });
   const rects = await page.evaluate(() => {
     const out = {};

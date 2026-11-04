@@ -41,7 +41,12 @@ def data_dir() -> Path:
 
 
 def root_dir() -> Path:
-    return Path(__file__).resolve().parent.parent
+    """Project root holding static/ and fixtures/: MARKSWEEP_ROOT, else the checkout, else the working directory."""
+    env = os.environ.get("MARKSWEEP_ROOT")
+    if env:
+        return Path(env).resolve()
+    here = Path(__file__).resolve().parent.parent
+    return here if (here / "static").is_dir() else Path.cwd()
 
 
 def fixtures_dir() -> Path:

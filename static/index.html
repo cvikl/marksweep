@@ -13,7 +13,7 @@
 <section class="card" data-shot="form">
   <h3>1. The photo</h3>
   <div class="demos" id="demos" data-shot="demos"></div>
-  <p class="note" id="demohint"></p>
+  <p class="note" id="demohint">Recorded sweeps replay instantly; your own photo runs live.</p>
   <div class="drop" id="drop"><input type="file" id="file" accept="image/*" hidden><span id="droptext">or drop your own photo here (jpg, png, webp, under 12 MB)</span></div>
   <h3>2. Acting for</h3>
   <select id="client" data-shot="client"></select>
@@ -37,7 +37,7 @@
 <div class="card"><h3>Segment</h3><p><b>SAM 3.1</b> (Meta Model API, Responses API, streamed) is asked three short noun phrases, "brand logo", "printed brand name", "repeating pattern on a bag". Every box and lossless mask comes back with a stable object id; boxes are merged across phrases and cut from the original photo. No model picks what to look at; the segmenter finds everything that looks like a mark.</p></div>
 <div class="card"><h3>Assess</h3><p><b>Muse Spark 1.3</b> sees each crop next to the office drawings of the client's registered marks and returns schema-checked JSON: what it sees, the text it reads, which client marks are candidates, six sub-scores with rationales (visual, aural, conceptual, goods, distinctiveness, imitation signals), a narrative in "highly concerning / worth checking / low concern" language, never a legal conclusion.</p></div>
 <div class="card"><h3>Record</h3><p>Photo hash, crop hashes, boxes, masks, scores, rationales and the ledger of every model call (model, purpose, latency, tokens) in one JSON file per sweep, served read-only. The roll-up is a weighted mean with N/A weights redistributed, same bands as Signum, our case-assessment product: red at 65, amber at 40.</p></div>
-<div class="card"><h3>What it is not</h3><p>Not a verdict. The register entries are the only comparison; the scores are research signals for the lawyer's own global assessment. The two demo clients use publicly registered marks and synthetic stall photos rendered with Muse Image; no real seller is pictured.</p></div>
+<div class="card"><h3>What it is not</h3><p>Not a verdict. The register entries are the only comparison; the scores are research signals for the lawyer's own global assessment. The two demo clients use publicly registered marks; the demo photos are public-domain customs seizure photographs and a CC BY-SA shop window, no seller is identified.</p></div>
 </div>
 <footer>Marksweep is the field-intake module of <a href="https://vantapointlabs.com">Signum</a>, built for the Meta Global AI Developer Hackathon, 4 Nov 2026. All model inference: Meta Model API (api.meta.ai). <a href="https://github.com/cvikl/marksweep">Source</a>.</footer>
 </main>

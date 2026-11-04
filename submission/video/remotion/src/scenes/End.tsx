@@ -23,7 +23,7 @@ export const End: React.FC = () => {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
           <div>
             <div style={{ font: `500 18px ${mono}`, letterSpacing: ".12em", textTransform: "uppercase", color: C.mute }}>Meta Global AI Developer Hackathon</div>
-            <div style={{ font: `500 30px/1.3 ${sans}`, marginTop: 8 }}>Muse Glimmer 30B, open weights · SAM 3.1 and Muse Spark 1.3 on the Meta Model API by configuration</div>
+            <div style={{ font: `500 30px/1.3 ${sans}`, marginTop: 8 }}>SAM 3.1 and Muse Spark 1.3 on the Meta Model API · Muse Glimmer 30B open weights on a laptop by configuration</div>
           </div>
           <div style={{ textAlign: "right", font: `500 26px/1.5 ${mono}`, color: C.navy, opacity: ramp(t, 13.5, 0.5) }}>meta.vantapointlabs.com<br />github.com/cvikl/marksweep</div>
         </div>
