@@ -1,0 +1,26 @@
+# Marksweep on the shared box. One container on the existing Caddy network (deploy_default) so the Caddy in
+# /opt/compass/deploy can reverse_proxy to it by name. Site config: /opt/caddy-sites/marksweep.caddy (see publish.sh).
+name: marksweep
+
+services:
+  marksweep:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    container_name: marksweep
+    env_file: .env
+    environment:
+      MARKSWEEP_DATA: /data
+      PORT: "8000"
+    volumes:
+      - marksweep_data:/data
+    restart: unless-stopped
+    mem_limit: 768m
+
+volumes:
+  marksweep_data:
+
+networks:
+  default:
+    name: deploy_default
+    external: true

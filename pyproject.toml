@@ -1,0 +1,30 @@
+[project]
+name = "marksweep"
+version = "0.1.0"
+description = "Field enforcement for trademark lawyers: SAM 3.1 isolates every mark in a photo, Muse Spark assesses it against the client's registered marks, the record is the evidence."
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+  "openai>=2.0",
+  "meta-sam-parser",
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "python-multipart",
+  "pillow>=10",
+  "numpy",
+  "httpx",
+  "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+marksweep = "marksweep.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["marksweep"]

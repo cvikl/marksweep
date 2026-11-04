@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marksweep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css"></head>
+<body>
+<header class="top"><div class="wrap"><a class="brand" href="/">Marksweep<small>field enforcement on the Meta Model API</small></a><span class="meta" id="mode"></span></div></header>
+<main class="wrap">
+<h1>A photo from the market stall in, an evidence record out.</h1>
+<p class="lead">The investigator photographs the stall, shelf or listing. SAM 3.1 isolates every logo, label and pattern. Muse Spark reads each one against the client's registered marks and scores the six global-assessment questions. The record keeps the hashes, the crops, the rationales and every model call. The lawyer decides.</p>
+
+<div class="grid side">
+<section class="card">
+  <h3>1. The photo</h3>
+  <div class="demos" id="demos"></div>
+  <p class="note" id="demohint"></p>
+  <div class="drop" id="drop"><input type="file" id="file" accept="image/*" hidden><span id="droptext">or drop your own photo here (jpg, png, webp, under 12 MB)</span></div>
+  <h3>2. Acting for</h3>
+  <select id="client"></select>
+  <div class="marks" id="marks"></div>
+  <h3>3. Field notes</h3>
+  <label>Goods seen</label><input type="text" id="goods" placeholder="e.g. handbags and wallets on a street stall">
+  <label>Jurisdictions in scope</label><input type="text" id="juris" placeholder="e.g. Hong Kong">
+  <label>Notes</label><textarea id="notes" placeholder="Where, when, what the seller said"></textarea>
+  <p style="margin-top:18px"><button id="run">Run the sweep</button> <span class="note" id="runnote"></span></p>
+</section>
+<aside>
+  <h3>Run log</h3>
+  <div class="log" id="log">Waiting.</div>
+  <h3>Recent records</h3>
+  <div class="list" id="recent"></div>
+</aside>
+</div>
+
+<h2>How it works</h2>
+<div class="grid two">
+<div class="card"><h3>Segment</h3><p><b>SAM 3.1</b> (Meta Model API, Responses API, streamed) is asked three short noun phrases, "brand logo", "printed brand name", "repeating pattern on a bag". Every box and lossless mask comes back with a stable object id; boxes are merged across phrases and cut from the original photo. No model picks what to look at; the segmenter finds everything that looks like a mark.</p></div>
+<div class="card"><h3>Assess</h3><p><b>Muse Spark 1.3</b> sees each crop next to the office drawings of the client's registered marks and returns schema-checked JSON: what it sees, the text it reads, which client marks are candidates, six sub-scores with rationales (visual, aural, conceptual, goods, distinctiveness, imitation signals), a narrative in "highly concerning / worth checking / low concern" language, never a legal conclusion.</p></div>
+<div class="card"><h3>Record</h3><p>Photo hash, crop hashes, boxes, masks, scores, rationales and the ledger of every model call (model, purpose, latency, tokens) in one JSON file per sweep, served read-only. The roll-up is a weighted mean with N/A weights redistributed, same bands as Signum, our case-assessment product: red at 65, amber at 40.</p></div>
+<div class="card"><h3>What it is not</h3><p>Not a verdict. The register entries are the only comparison; the scores are research signals for the lawyer's own global assessment. The two demo clients use publicly registered marks and synthetic stall photos rendered with Muse Image; no real seller is pictured.</p></div>
+</div>
+<footer>Marksweep is the field-intake module of <a href="https://vantapointlabs.com">Signum</a>, built for the Meta Global AI Developer Hackathon, 4 Nov 2026. All model inference: Meta Model API (api.meta.ai). <a href="https://github.com/cvikl/marksweep">Source</a>.</footer>
+</main>
+<script>
+const $=s=>document.querySelector(s);let demo=null,file=null,clients=[];
+async function j(u,o){const r=await fetch(u,o);if(!r.ok)throw new Error((await r.text())||r.status);return r.json()}
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+async function init(){
+  const h=await j('/healthz');$('#mode').textContent=(h.mode==='live'?'live, ':'recorded demos, ')+h.models.segment+' + '+h.models.assess;
+  if(h.mode!=='live')$('#demohint').textContent='This host has no API key: pick one of the recorded sweeps (real SAM 3.1 and Muse Spark outputs, replayed).';
+  clients=await j('/api/clients');$('#client').innerHTML=clients.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');showMarks();
+  const d=await j('/api/demos');$('#demos').innerHTML=d.map(x=>`<button class="demo" data-n="${x.name}" data-c="${x.client}" data-g="${esc(x.goods||'')}" data-j="${esc(x.jurisdictions||'')}" data-o="${esc(x.notes||'')}"><img src="/static/demos/${x.name}/${x.photo}" alt=""><div>${esc(x.title||x.name)}</div></button>`).join('');
+  document.querySelectorAll('.demo').forEach(b=>b.onclick=()=>{document.querySelectorAll('.demo').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');demo=b.dataset.n;file=null;$('#drop').classList.remove('has');$('#droptext').textContent='or drop your own photo here';$('#client').value=b.dataset.c;$('#goods').value=b.dataset.g;$('#juris').value=b.dataset.j;$('#notes').value=b.dataset.o;showMarks()});
+  recent();
+}
+function showMarks(){const c=clients.find(x=>x.id===$('#client').value);$('#marks').innerHTML=(c?c.marks:[]).map(m=>`<figure><a href="${m.url}" target="_blank" rel="noopener"><img src="/marks/${m.image}" alt=""></a><figcaption>${esc(m.office)} ${esc(m.number)}</figcaption></figure>`).join('')}
+$('#client').onchange=showMarks;
+$('#drop').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{file=e.target.files[0];if(!file)return;demo=null;document.querySelectorAll('.demo').forEach(x=>x.classList.remove('sel'));const u=URL.createObjectURL(file);$('#drop').classList.add('has');$('#droptext').innerHTML=`<img src="${u}" alt="">${esc(file.name)}`};
+['dragover','drop'].forEach(ev=>$('#drop').addEventListener(ev,e=>{e.preventDefault();if(ev==='drop'&&e.dataTransfer.files[0]){$('#file').files=e.dataTransfer.files;$('#file').onchange({target:$('#file')})}}));
+async function recent(){const r=await j('/api/sweeps');$('#recent').innerHTML=r.slice(0,8).map(x=>`<a href="/sweeps/${x.id}"><span>${esc(x.client?.name||'')} · ${x.summary?x.summary.elements+' elements':''}</span><span class="band ${x.summary?.highest?.band||''}">${x.summary?.highest?x.summary.highest.score:x.status}</span></a>`).join('')||'<p class="note">None yet.</p>'}
+function log(line,cls){const l=$('#log');if(l.textContent==='Waiting.')l.textContent='';l.insertAdjacentHTML('beforeend',`<div class="${cls||''}">${line}</div>`);l.scrollTop=l.scrollHeight}
+$('#run').onclick=async()=>{
+  const fd=new FormData();
+  if(file)fd.append('photo',file);else if(demo){const b=await (await fetch(`/static/demos/${demo}/`+document.querySelector(`.demo[data-n="${demo}"] img`).src.split('/').pop())).blob();fd.append('photo',new File([b],'photo.jpg',{type:b.type}));fd.append('demo',demo)}else{$('#runnote').textContent='Pick a demo photo or drop your own.';return}
+  fd.append('client',$('#client').value);fd.append('goods',$('#goods').value);fd.append('jurisdictions',$('#juris').value);fd.append('notes',$('#notes').value);
+  const tok=new URLSearchParams(location.search).get('token');if(tok)fd.append('token',tok);
+  $('#run').disabled=true;$('#runnote').textContent='';$('#log').textContent='Waiting.';
+  try{const {job}=await j('/api/sweeps'+(tok?`?token=${encodeURIComponent(tok)}`:''),{method:'POST',body:fd});
+    const es=new EventSource(`/api/jobs/${job}/events`);
+    es.onmessage=ev=>{const d=JSON.parse(ev.data);const t=new Date().toLocaleTimeString([],{hour12:false});
+      const m={photo:()=>`${t}  photo sha256 ${d.hash.slice(0,16)}…  ${d.size[0]}×${d.size[1]}`,
+        segment:()=>`${t}  <span class="m">sam-3.1</span>  looking for "${esc(d.concept)}"`,
+        segmented:()=>`          ${d.objects} object(s)`,
+        elements:()=>`${t}  ${d.count} element(s) after merge`,
+        assess:()=>`${t}  <span class="m">muse-spark-1.3</span>  element ${d.index} of ${d.of}, with the client's register drawings`,
+        assessed:()=>`          <span class="band ${d.band}">${d.band}</span> ${d.score??''}`,
+        done:()=>`${t}  record written: ${d.id}`,
+        error:()=>`<span class="err">${esc(d.message)}</span>`,
+        closed:()=>''}[d.event];
+      if(m){const s=m();if(s)log(s)}
+      if(d.event==='closed'){es.close();$('#run').disabled=false;recent();if(d.sweep_id){log(`<a href="/sweeps/${d.sweep_id}">Open the record →</a>`);setTimeout(()=>location.href=`/sweeps/${d.sweep_id}`,900)}}};
+    es.onerror=()=>{es.close();$('#run').disabled=false}}
+  catch(e){$('#runnote').textContent=e.message;$('#run').disabled=false}
+};
+init();
+</script></body></html>

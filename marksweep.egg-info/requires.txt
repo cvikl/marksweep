@@ -1,0 +1,12 @@
+openai>=2.0
+meta-sam-parser
+fastapi>=0.115
+uvicorn[standard]>=0.30
+python-multipart
+pillow>=10
+numpy
+httpx
+pyyaml
+
+[dev]
+pytest

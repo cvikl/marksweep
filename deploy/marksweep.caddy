@@ -1,0 +1,10 @@
+# Marksweep, drop-in for the shared Caddy (/opt/caddy-sites). Published by deploy/publish.sh.
+meta.vantapointlabs.com {
+	encode zstd gzip
+	request_body {
+		max_size 14MB
+	}
+	reverse_proxy marksweep:8000 {
+		flush_interval -1
+	}
+}
