@@ -154,3 +154,43 @@ def generate_image(prompt: str, out: Path, ledger: Ledger | None = None) -> Path
             raise RuntimeError("image response had neither b64_json nor url")
         entry["bytes"] = out.stat().st_size
     return out
+
+
+# ----------------------------------------------------------------------------- VLM grounding fallback
+
+GROUND_SCHEMA = {
+    "type": "object",
+    "properties": {"elements": {"type": "array", "items": {"type": "object", "properties": {
+        "label": {"type": "string"}, "kind": {"type": "string", "enum": ["logo", "brand name", "pattern", "label"]},
+        "box": {"type": "array", "items": {"type": "number"}, "minItems": 4, "maxItems": 4,
+                "description": "[left, top, right, bottom] as fractions 0..1 of the image width and height"}},
+        "required": ["label", "kind", "box"]}}},
+    "required": ["elements"],
+}
+
+
+def segment_vlm(image: Path, concept: str, ledger: Ledger | None = None, size: tuple[int, int] | None = None) -> dict:
+    """When SAM 3.1 is not reachable: ask the vision model for the boxes of every <concept> in the photo.
+    Returns the same shape as segment(): boxes in pixel coordinates, no masks."""
+    ledger = ledger or Ledger()
+    if size is None:
+        from PIL import Image
+        with Image.open(image) as im:
+            size = im.size
+    w, h = size
+    prompt = (f"Find every \"{concept}\" in this photograph. Return JSON {{\"elements\": [{{\"label\", \"kind\", \"box\"}}]}} "
+              f"where box is [left, top, right, bottom] as fractions of the image width and height (0 to 1), tight around "
+              f"the element. Include every instance, even partly hidden or small ones. Nothing else.")
+    out = spark_json(prompt, [image], GROUND_SCHEMA, ledger, purpose="ground", max_tokens=1200)
+    boxes = []
+    for i, e in enumerate(out.get("elements") or [], 1):
+        try:
+            l, t, r, b = [float(x) for x in e["box"]]
+        except Exception:  # noqa: BLE001
+            continue
+        if max(l, t, r, b) > 1.5:  # model answered in pixels
+            l, t, r, b = l / w, t / h, r / w, b / h
+        boxes.append({"object_id": str(i), "left": l * w, "top": t * h, "right": r * w, "bottom": b * h,
+                      "confidence": None, "label": e.get("label"), "kind": e.get("kind")})
+    return {"concept": concept, "outcome": "completed", "media": {"width": w, "height": h}, "boxes": boxes,
+            "masks": [], "diagnostics": [], "method": "vlm-grounding"}

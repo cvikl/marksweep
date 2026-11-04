@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-BASE_URL = "https://api.meta.ai/v1"
+BASE_URL = os.environ.get("MARKSWEEP_BASE_URL", "https://api.meta.ai/v1")
 SPARK_MODEL = os.environ.get("MARKSWEEP_SPARK_MODEL", "muse-spark-1.3")
 SAM_MODEL = "sam-3.1"
 IMAGE_MODEL = "muse-image-1.0"
@@ -33,3 +33,8 @@ def fixtures_dir() -> Path:
 
 def public_token() -> str:
     return os.environ.get("MARKSWEEP_TOKEN", "").strip()
+
+
+def segmenter() -> str:
+    """"sam" (SAM 3.1 on the Meta Model API) or "vlm" (bounding boxes from the vision model itself)."""
+    return os.environ.get("MARKSWEEP_SEGMENTER", "sam")

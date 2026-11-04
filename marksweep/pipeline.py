@@ -156,7 +156,7 @@ def run_sweep(photo_path: Path, client_id: str, context: dict | None = None, dat
         "id": sweep_id, "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "client": {"id": client_id, "name": client["name"]}, "context": context,
         "photo": {"file": saved.name, "sha256": photo_hash, "width": photo.width, "height": photo.height},
-        "models": {"segment": config.SAM_MODEL, "assess": config.SPARK_MODEL},
+        "models": {"segment": config.SAM_MODEL if config.segmenter() == "sam" else config.SPARK_MODEL + " (grounding)", "assess": config.SPARK_MODEL},
         "mode": "fixture" if fixture else "live",
         "elements": [], "status": "running",
     }
@@ -169,8 +169,10 @@ def run_sweep(photo_path: Path, client_id: str, context: dict | None = None, dat
             res = fixture["segment"].get(concept) or {"concept": concept, "outcome": "completed", "boxes": [], "masks": []}
             with ledger.call(config.SAM_MODEL, "segment", concept=concept, replay=True) as e:
                 e["objects"] = len(res["boxes"])
-        else:
+        elif config.segmenter() == "sam":
             res = meta.segment(saved, concept, ledger)
+        else:
+            res = meta.segment_vlm(saved, concept, ledger, photo.size)
         sam_results.append(res)
         say("segmented", {"concept": concept, "objects": len(res["boxes"])})
     (sdir / "sam.json").write_text(json.dumps(sam_results, indent=1))
