@@ -24,16 +24,14 @@ vol = modal.Volume.from_name("marksweep-glimmer-weights", create_if_missing=True
 app = modal.App(APP)
 
 image = (
-    modal.Image.from_registry("nvidia/cuda:12.6.3-runtime-ubuntu24.04", add_python="3.12")
-    .apt_install("curl", "unzip", "libgomp1", "libcurl4")
-    .pip_install("huggingface_hub[hf_transfer]", "fastapi", "httpx")
+    modal.Image.from_registry("nvidia/cuda:12.6.3-devel-ubuntu24.04", add_python="3.12")
+    .apt_install("git", "cmake", "build-essential", "curl", "libcurl4-openssl-dev", "libgomp1", "ninja-build")
+    .pip_install("huggingface_hub[hf_transfer]")
     .run_commands(
-        # prebuilt CUDA llama.cpp release (server + mtmd); falls back to the latest release if the pin is gone
-        f"set -e; cd /opt; for tag in {LLAMA_RELEASE} latest; do "
-        f"url=$(curl -s https://api.github.com/repos/ggml-org/llama.cpp/releases/$([ $tag = latest ] && echo latest || echo tags/$tag) "
-        f"| python3 -c \"import json,sys;a=[x['browser_download_url'] for x in json.load(sys.stdin)['assets'] if 'ubuntu' in x['name'] and 'cuda' in x['name'] and 'x64' in x['name']];print(a[0] if a else '')\"); "
-        f"[ -n \"$url\" ] && curl -sL \"$url\" -o llama.zip && unzip -q llama.zip -d llama && break; done; "
-        f"ls llama; find llama -name llama-server -exec cp {{}} /usr/local/bin/ \; ; find llama -name '*.so*' -exec cp {{}} /usr/local/lib/ \; ; ldconfig; llama-server --version"
+        "git clone --depth 1 https://github.com/ggml-org/llama.cpp /opt/llama.cpp",
+        "grep -c LLM_ARCH_MUSE_GLIMMER /opt/llama.cpp/src/llama-arch.cpp",
+        "cd /opt/llama.cpp && cmake -B build -G Ninja -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DCMAKE_CUDA_ARCHITECTURES='89;90' -DLLAMA_CURL=ON "
+        "&& cmake --build build --config Release -j --target llama-server llama-mtmd-cli && cp build/bin/llama-server /usr/local/bin/ && ls -la /usr/local/bin/llama-server",
     )
 )
 
