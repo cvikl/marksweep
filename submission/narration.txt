@@ -1,0 +1,23 @@
+1. Title
+Brand owners lose the fight against copies at the stall, not in court. An investigator photographs a market, a shop window, a shelf. Then someone sorts hundreds of photos by hand, and nothing records which mark was compared with which, or why. This is Marksweep: a photo from the field in, a trademark evidence record out.
+
+2. Upload
+We are acting for a brand owner. The investigator picks the photo, picks the client, writes two lines of field notes: what goods, which jurisdiction. Press run.
+
+3. Segment
+First, Meta's vision model is asked three plain questions: where is a brand logo, where is a printed brand name, where is a repeating pattern. Every answer comes back as a box. Boxes are merged, cut from the original photo, and each crop is hashed. No person decided what to look at.
+
+4. Assess
+Then each crop goes to the model again, this time next to the official register drawings of the client's marks. It returns structured JSON only: what it sees, the text it reads, which registrations are candidates, and six scores with one-sentence reasons. Visual, aural, conceptual, goods, distinctiveness, imitation signals. The same six questions a court asks.
+
+5. Record
+The record. The photo with numbered, colour-banded boxes. Red is highly concerning, amber worth checking, green low concern. Every element has its crop, its score and its rationales. Click a candidate mark and you land on the office record. Every number is a research signal for the lawyer; the tool never says infringes.
+
+6. Control
+A control: another house's monogram, for the same client. Nothing matches, every score is capped at twenty five, and the narrative says so. The model is not rewarded for finding trouble.
+
+7. Ledger
+Under every record, the ledger: every model call, with model id, purpose, latency and tokens. Meta's open-weight Muse Glimmer runs on hardware we control, so client photos never leave our tenancy. The same code switches to SAM 3.1 and Muse Spark on the Meta Model API by configuration.
+
+8. End
+Marksweep is the field-intake module of Signum, our case assessment product piloting with a Hong Kong IP firm. Built on 4 November for the Meta Global AI Developer Hackathon. Code, record format and this video are the hackathon's work. meta.vantapointlabs.com.

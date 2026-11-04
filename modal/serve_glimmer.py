@@ -47,13 +47,13 @@ def download():
     print(os.listdir("/weights"))
 
 
-@app.function(image=image, gpu="L40S", volumes={"/weights": vol}, timeout=60 * 60, scaledown_window=600,
+@app.function(image=image, gpu="A10G", volumes={"/weights": vol}, timeout=60 * 60, scaledown_window=240,
               secrets=[modal.Secret.from_name("marksweep-glimmer")])
-@modal.concurrent(max_inputs=4)
+@modal.concurrent(max_inputs=2)
 @modal.web_server(8080, startup_timeout=600)
 def serve():
     cmd = ["llama-server", "-m", f"/weights/{TEXT}", "--mmproj", f"/weights/{MMPROJ}", "-a", "muse-glimmer-30B",
-           "-ngl", "99", "-c", "32768", "-np", "2", "--host", "0.0.0.0", "--port", "8080", "--jinja",
+           "-ngl", "99", "-c", "12288", "-np", "1", "-fa", "on", "--host", "0.0.0.0", "--port", "8080", "--jinja",
            "--temp", "0.2", "--top-p", "0.95", "--top-k", "64", "--api-key", os.environ["GLIMMER_TOKEN"]]
     subprocess.Popen(cmd)
     time.sleep(1)

@@ -14,28 +14,28 @@ const LABEL={red:'Highly concerning',amber:'Worth checking',green:'Low concern',
   const r=await (await fetch('/api/sweeps/'+id)).json();const cl=(await (await fetch('/api/clients')).json()).find(c=>c.id===r.client.id)||{marks:[]};
   $('#mode').textContent=`${r.mode} · ${r.models.segment} + ${r.models.assess}`;
   const f=n=>`/api/sweeps/${r.id}/file/${n}`;const W=r.photo.width,H=r.photo.height;
-  const boxes=r.elements.map(e=>`<div class="box ${e.band||''}" style="left:${e.box.left/W*100}%;top:${e.box.top/H*100}%;width:${(e.box.right-e.box.left)/W*100}%;height:${(e.box.bottom-e.box.top)/H*100}%"><span>${e.index}${e.score!=null?' · '+e.score:''}</span></div>`).join('');
+  const boxes=r.elements.map(e=>`<div class="box ${e.band||''}" data-shot="box-${e.index}" style="left:${e.box.left/W*100}%;top:${e.box.top/H*100}%;width:${(e.box.right-e.box.left)/W*100}%;height:${(e.box.bottom-e.box.top)/H*100}%"><span>${e.index}${e.score!=null?' · '+e.score:''}</span></div>`).join('');
   const s=r.summary||{};const hi=s.highest;
   const els=r.elements.map(e=>{
     const bd=(e.breakdown||[]).map(b=>`<tr><td>${esc(b.label)}</td><td class="n">${b.na?'n/a':b.score}</td><td><div class="bar"><i style="width:${b.na?0:b.score}%"></i></div></td><td>${esc(b.rationale)}</td></tr>`).join('');
     const cands=(e.candidate_marks||[]).map(cid=>{const m=cl.marks.find(x=>x.id===cid);return m?`<a href="${m.url}" target="_blank" rel="noopener"><img src="/marks/${m.image}" alt="" title="${esc(m.mark)} ${esc(m.office)} ${esc(m.number)}"></a>`:esc(cid)}).join(' ');
-    return `<section class="el" id="e${e.index}"><div><img src="${f(e.crop)}" alt=""><div class="kv" style="margin-top:6px">found as "${esc(e.found_as)}"<br>sha256 ${esc((e.crop_sha256||'').slice(0,16))}…</div></div>
+    return `<section class="el" id="e${e.index}" data-shot="element-${e.index}"><div><img src="${f(e.crop)}" alt=""><div class="kv" style="margin-top:6px">found as "${esc(e.found_as)}"<br>sha256 ${esc((e.crop_sha256||'').slice(0,16))}…</div></div>
     <div><div class="hd"><span class="score">${e.score??'–'}</span><span class="band ${e.band||''}">${LABEL[e.band]||e.band||''}</span><b>Element ${e.index}</b>${e.text_read?`<span class="kv">reads "${esc(e.text_read)}"</span>`:''}</div>
     <p class="seen">${esc(e.seen||e.error||'')}</p>
     ${cands?`<div class="marks" style="margin:4px 0 8px">${cands.replace(/<img/g,'<img style="width:64px;height:48px;object-fit:contain;background:#fff;border:1px solid var(--line);border-radius:4px"')}</div>`:''}
     <p>${esc(e.narrative||'')}</p>
-    ${bd?`<details><summary>Six questions, weighted mean ${e.score}</summary><table><tr><th>Dimension</th><th>Score</th><th></th><th>Rationale (Muse Spark)</th></tr>${bd}</table></details>`:''}</div></section>`}).join('');
+    ${bd?`<details data-shot="breakdown-${e.index}"><summary>Six questions, weighted mean ${e.score}</summary><table><tr><th>Dimension</th><th>Score</th><th></th><th>Rationale (Muse Spark)</th></tr>${bd}</table></details>`:''}</div></section>`}).join('');
   const led=(r.ledger||[]).map(l=>`<tr><td class="n">${esc(l.model)}</td><td>${esc(l.purpose)}${l.concept?` "${esc(l.concept)}"`:''}${l.replay?' (replayed)':''}</td><td class="n">${l.ms} ms</td><td class="n">${l.input_tokens??l.prompt_tokens??''}${(l.output_tokens??l.completion_tokens)!=null?' / '+(l.output_tokens??l.completion_tokens):''}${l.objects!=null?l.objects+' obj':''}</td><td class="n">${esc(l.status)}</td></tr>`).join('');
   $('#main').innerHTML=`
-  <h1>${esc(r.client.name)}: ${s.elements||0} element${s.elements===1?'':'s'}, ${s.bands?.red||0} highly concerning, ${s.bands?.amber||0} worth checking, ${s.bands?.green||0} low concern.</h1>
+  <h1 data-shot="headline">${esc(r.client.name)}: ${s.elements||0} element${s.elements===1?'':'s'}, ${s.bands?.red||0} highly concerning, ${s.bands?.amber||0} worth checking, ${s.bands?.green||0} low concern.</h1>
   <p class="lead">Sweep ${esc(r.id)} · ${esc(r.created)} · ${esc(r.context?.jurisdictions||'')} ${r.context?.goods?'· goods: '+esc(r.context.goods):''}</p>
-  <div class="grid side"><div class="photo"><img src="${f(r.photo.file)}" alt="">${boxes}</div>
-  <div class="card"><h3>Record</h3><div class="kv">photo sha256<br>${esc(r.photo.sha256)}<br><br>${r.photo.width}×${r.photo.height} px · ${r.elements.length} crops hashed · ${r.mode} run<br><br>segment: ${esc(r.models.segment)}<br>assess: ${esc(r.models.assess)}</div>
+  <div class="grid side"><div class="photo" data-shot="photo"><img src="${f(r.photo.file)}" alt="">${boxes}</div>
+  <div class="card" data-shot="recordcard"><h3>Record</h3><div class="kv">photo sha256<br>${esc(r.photo.sha256)}<br><br>${r.photo.width}×${r.photo.height} px · ${r.elements.length} crops hashed · ${r.mode} run<br><br>segment: ${esc(r.models.segment)}<br>assess: ${esc(r.models.assess)}</div>
   ${r.context?.notes?`<h3>Field notes</h3><p style="font-size:14px">${esc(r.context.notes)}</p>`:''}
   <h3>Client marks compared</h3><div class="marks">${cl.marks.map(m=>`<figure><a href="${m.url}" target="_blank" rel="noopener"><img src="/marks/${m.image}" alt=""></a><figcaption>${esc(m.office)} ${esc(m.number)}</figcaption></figure>`).join('')}</div>
   <p class="note" style="margin-top:14px"><a href="/api/sweeps/${r.id}">record.json</a></p></div></div>
-  <h2>Elements</h2>${els||'<p class="note">SAM 3.1 found nothing that looks like a mark.</p>'}
-  <h2>Model ledger</h2><table><tr><th>Model</th><th>Call</th><th>Latency</th><th>Tokens in / out</th><th></th></tr>${led}</table>
+  <h2 data-shot="elements-h">Elements</h2>${els||'<p class="note">SAM 3.1 found nothing that looks like a mark.</p>'}
+  <h2 data-shot="ledger-h">Model ledger</h2><table data-shot="ledger"><tr><th>Model</th><th>Call</th><th>Latency</th><th>Tokens in / out</th><th></th></tr>${led}</table>
   <footer>Scores are research signals for the supervising lawyer's own global assessment (Sabel v Puma line), never a legal conclusion. Register links go to USPTO TSDR, EUIPO eSearch and WIPO Madrid Monitor.</footer>`;
 })();
 </script></body></html>

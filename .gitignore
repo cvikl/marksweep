@@ -4,3 +4,8 @@ __pycache__/
 data/
 *.pyc
 .pytest_cache/
+submission/video/raw/
+submission/video/remotion/node_modules
+submission/video/remotion/out/
+submission/video/remotion/public/*.png
+.env.glimmer

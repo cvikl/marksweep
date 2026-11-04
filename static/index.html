@@ -10,23 +10,23 @@
 <p class="lead">The investigator photographs the stall, shelf or listing. SAM 3.1 isolates every logo, label and pattern. Muse Spark reads each one against the client's registered marks and scores the six global-assessment questions. The record keeps the hashes, the crops, the rationales and every model call. The lawyer decides.</p>
 
 <div class="grid side">
-<section class="card">
+<section class="card" data-shot="form">
   <h3>1. The photo</h3>
-  <div class="demos" id="demos"></div>
+  <div class="demos" id="demos" data-shot="demos"></div>
   <p class="note" id="demohint"></p>
   <div class="drop" id="drop"><input type="file" id="file" accept="image/*" hidden><span id="droptext">or drop your own photo here (jpg, png, webp, under 12 MB)</span></div>
   <h3>2. Acting for</h3>
-  <select id="client"></select>
-  <div class="marks" id="marks"></div>
-  <h3>3. Field notes</h3>
+  <select id="client" data-shot="client"></select>
+  <div class="marks" id="marks" data-shot="marks"></div>
+  <h3 data-shot="notes">3. Field notes</h3>
   <label>Goods seen</label><input type="text" id="goods" placeholder="e.g. handbags and wallets on a street stall">
   <label>Jurisdictions in scope</label><input type="text" id="juris" placeholder="e.g. Hong Kong">
   <label>Notes</label><textarea id="notes" placeholder="Where, when, what the seller said"></textarea>
-  <p style="margin-top:18px"><button id="run">Run the sweep</button> <span class="note" id="runnote"></span></p>
+  <p style="margin-top:18px"><button id="run" data-shot="run">Run the sweep</button> <span class="note" id="runnote"></span></p>
 </section>
 <aside>
   <h3>Run log</h3>
-  <div class="log" id="log">Waiting.</div>
+  <div class="log" id="log" data-shot="log">Waiting.</div>
   <h3>Recent records</h3>
   <div class="list" id="recent"></div>
 </aside>
