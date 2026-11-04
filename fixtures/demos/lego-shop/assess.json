@@ -1,0 +1,236 @@
+[
+ {
+  "seen": "The crop shows stylized pink lettering spelling Friendships with decorative dots and flourishes.",
+  "text_read": "Friendships",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 10,
+    "rationale": "The pink script lettering shares no layout or design with the LEGO logos.",
+    "na": false
+   },
+   "aural": {
+    "score": 5,
+    "rationale": "The spoken word Friendships sounds entirely different from Lego.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 10,
+    "rationale": "The idea is friendship and social connection, not a building-brick brand.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Toys overlap in type with Class 28 but without a similar mark there is no link.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No meaningful similarity exists so reputation adds no concern here.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 5,
+    "rationale": "The fanciful friendship styling shows no imitation of LEGO trade dress.",
+    "na": false
+   }
+  },
+  "narrative": "Low concern for LEGO enforcement as this wording is visually and phonetically distant from the LEGO marks. The element is not the client's concern despite appearing on toy packaging.",
+  "primary_match": ""
+ },
+ {
+  "seen": "A vertical red strip with large white stylized lettering above a white toy figure head.",
+  "text_read": "NINJA",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 10,
+    "rationale": "It shares no LEGO logo lettering, outline or minifigure shape.",
+    "na": false
+   },
+   "aural": {
+    "score": 5,
+    "rationale": "The word NINJA sounds entirely different from LEGO.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 5,
+    "rationale": "It conveys ninjas rather than the LEGO building toy idea.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Toy related goods alone do not create concern without mark similarity.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No client mark is meaningfully similar so reputation is not engaged.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 5,
+    "rationale": "There is no altered LEGO lettering or copied LEGO trade dress.",
+    "na": false
+   }
+  },
+  "narrative": "This element shows only NINJA branding and is of low concern. It does not reproduce the LEGO logo, word or figure and is not the client's concern.",
+  "primary_match": ""
+ },
+ {
+  "seen": "The crop shows large light blue arched block letters on a blue background above a small graphic.",
+  "text_read": "DERPY",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 10,
+    "rationale": "Light blue arched DERPY lettering shares no get up with the red square LEGO logos.",
+    "na": false
+   },
+   "aural": {
+    "score": 5,
+    "rationale": "DERPY sounds entirely different from LEGO with no shared syllables.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 10,
+    "rationale": "DERPY conveys a different playful idea unrelated to LEGO building toys.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Toy boxes could fall in Class 28 but with no similar mark there is little relevance.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No LEGO mark is meaningfully similar so reputation is not engaged.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 5,
+    "rationale": "No copying of LEGO logo style, colors or trade dress is visible.",
+    "na": false
+   }
+  },
+  "narrative": "This element is low concern and is not the client's concern. The DERPY lettering looks and sounds entirely different from the LEGO marks. No visual, aural or conceptual link points toward the client.",
+  "primary_match": ""
+ },
+ {
+  "seen": "Blurry white block text on a blue background.",
+  "text_read": "WIRELESS HEADPHONES",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 5,
+    "rationale": "The plain white lettering shares no get up with the LEGO logos or figure.",
+    "na": false
+   },
+   "aural": {
+    "score": 0,
+    "rationale": "The words WIRELESS HEADPHONES share no sound with LEGO.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 5,
+    "rationale": "The idea is generic audio equipment, unrelated to LEGO toys or branding.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 10,
+    "rationale": "The headphones wording points away from building brick toys in class 28.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No meaningful similarity exists so client reputation is not engaged here.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 5,
+    "rationale": "There is no altered lettering or copied trade dress suggesting imitation.",
+    "na": false
+   }
+  },
+  "narrative": "This element is low concern and is not the client's concern. It shows only generic wireless headphones wording with no link to the LEGO branding. No further action on this crop is warranted for LEGO.",
+  "primary_match": ""
+ },
+ {
+  "seen": "The crop shows the word Friendships in bubbly white letters with pink outline on a dark purple background.",
+  "text_read": "Friendships",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 5,
+    "rationale": "The pink and white script shares no visual features with the LEGO logos or minifigure.",
+    "na": false
+   },
+   "aural": {
+    "score": 5,
+    "rationale": "Friendships sounds entirely different from LEGO when spoken.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 5,
+    "rationale": "The idea of friendships conveys nothing related to the LEGO brand idea.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Goods overlap is irrelevant without any mark similarity to create confusion.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No meaningful similarity exists so reputation of client marks does not increase concern.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 5,
+    "rationale": "No altered letters or copied trade dress suggesting deliberate imitation is visible.",
+    "na": false
+   }
+  },
+  "narrative": "The word Friendships shares no visual, aural or conceptual overlap with any LEGO mark. The element is not the client's concern and requires no further action on this crop.",
+  "primary_match": ""
+ },
+ {
+  "seen": "A vertical dark strip with white stylized lettering running down it.",
+  "text_read": "Friendships",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 5,
+    "rationale": "The dark vertical strip with white script shares no get-up with any LEGO logo.",
+    "na": false
+   },
+   "aural": {
+    "score": 5,
+    "rationale": "The word read as Friendships sounds entirely different from LEGO.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 5,
+    "rationale": "The idea of friendship text conveys nothing related to the LEGO marks.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 10,
+    "rationale": "The strip alone gives no link to the toy goods covered by the client marks.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No mark is meaningfully similar so reputation does not increase concern.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 5,
+    "rationale": "No altered letters or copied trade dress suggesting imitation is visible.",
+    "na": false
+   }
+  },
+  "narrative": "This element is of low concern and is not the client's concern. The text and styling show no connection to LEGO branding and no sign of imitation.",
+  "primary_match": ""
+ }
+]

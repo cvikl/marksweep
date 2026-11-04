@@ -1,0 +1,127 @@
+[
+ {
+  "seen": "A white fabric strip on a sneaker with black quoted text reading Louis shown upside down.",
+  "text_read": "\"Louis\"",
+  "candidate_marks": [
+   "lv_word_uspto_1045932"
+  ],
+  "sub_scores": {
+   "visual": {
+    "score": 65,
+    "rationale": "The plain black Louis text shares the full first word of the client word mark in similar lettering.",
+    "na": false
+   },
+   "aural": {
+    "score": 80,
+    "rationale": "Spoken Louis is identical to the first word of LOUIS VUITTON.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 65,
+    "rationale": "Both convey the personal name Louis as a brand identifier.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 75,
+    "rationale": "Handbags and pouches seen fall in Class 18 covered by the word mark, though sneakers do not.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 80,
+    "rationale": "The LOUIS VUITTON word mark is rated high distinctiveness and is meaningfully shared here.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 65,
+    "rationale": "Quoted Louis combined with the reported Off-Louis form suggests deliberate referencing while altering the name.",
+    "na": false
+   }
+  },
+  "narrative": "This use of Louis on sneaker trim is worth checking against the LOUIS VUITTON word mark. The identical first word creates a clear link even with the quotation marks and rotated presentation. Counsel should review the full Off-Louis presentation noted in the field before next steps.",
+  "primary_match": "lv_word_uspto_1045932"
+ },
+ {
+  "seen": "A brown bag panel covered with a repeating tan pattern of interlocking letters, flowers and diamond shapes held by gloved hands.",
+  "text_read": "LV",
+  "candidate_marks": [
+   "lv_monogram_canvas_uspto_1770131",
+   "lv_flower_em_000311985",
+   "lv_letters_uspto_1938808"
+  ],
+  "sub_scores": {
+   "visual": {
+    "score": 95,
+    "rationale": "The repeating LV, four-petal flower and quatrefoil arrangement closely matches the canvas drawing.",
+    "na": false
+   },
+   "aural": {
+    "score": 10,
+    "rationale": "No LOUIS VUITTON wording is legible, only stylized LV initials are repeated as pattern.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 90,
+    "rationale": "The element conveys the same luxury monogram canvas idea as the client's repeating pattern.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 85,
+    "rationale": "The tote relates to handbags and the same case includes class 25 sneakers matching the canvas registration.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 95,
+    "rationale": "The matched monogram canvas and flower devices carry exceptional reputation.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 85,
+    "rationale": "Exact replication of the brown and tan repeating monogram layout suggests deliberate imitation.",
+    "na": false
+   }
+  },
+  "narrative": "The brown repeating LV and flower pattern on a tote bag is highly concerning given the near identical layout to the client's monogram canvas. The same seizure includes sneakers and pouches with similar get-up which further supports review for coordinated copying.",
+  "primary_match": "lv_monogram_canvas_uspto_1770131"
+ },
+ {
+  "seen": "Close-up of black capital letters printed vertically on beige woven fabric.",
+  "text_read": "NOTTIU",
+  "candidate_marks": [
+   "lv_word_uspto_1045932"
+  ],
+  "sub_scores": {
+   "visual": {
+    "score": 85,
+    "rationale": "Letter shapes and spelling match the VUITTON element of the client's word mark.",
+    "na": false
+   },
+   "aural": {
+    "score": 90,
+    "rationale": "Pronunciation of the visible NOTTIU fragment is identical to the VUITTON portion of the word mark.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 90,
+    "rationale": "The text conveys the same luxury house name as the client's word mark.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 95,
+    "rationale": "Handbags and pouches seen in the seizure fall directly in Nice Class 18 of the word mark.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 85,
+    "rationale": "The LOUIS VUITTON word mark has high reputation that increases confusion risk here.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 25,
+    "rationale": "Crop alone shows straightforward reproduction without visible alteration to evade detection.",
+    "na": false
+   }
+  },
+  "narrative": "This vertical VUITTON lettering reproducing the distinctive portion of the client's word mark is highly concerning given the identical spelling and typeface. On fabric consistent with handbags or pouches in this seizure, it falls directly within Class 18 coverage and is worth checking for authorization and source.",
+  "primary_match": "lv_word_uspto_1045932"
+ }
+]

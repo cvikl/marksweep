@@ -29,7 +29,17 @@ def _aclient() -> AsyncOpenAI:
     return AsyncOpenAI(base_url=config.BASE_URL, api_key=config.api_key())
 
 
-def data_url(path: Path) -> str:
+def data_url(path: Path, max_side: int | None = None) -> str:
+    max_side = max_side or int(__import__("os").environ.get("MARKSWEEP_IMAGE_MAX_SIDE", "0") or 0)
+    if max_side:
+        from io import BytesIO
+        from PIL import Image, ImageOps
+        with Image.open(path) as im:
+            im = ImageOps.exif_transpose(im).convert("RGB")
+            if max(im.size) > max_side:
+                im = ImageOps.contain(im, (max_side, max_side))
+            buf = BytesIO(); im.save(buf, "JPEG", quality=88)
+            return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
     mt = mimetypes.guess_type(path.name)[0] or "image/jpeg"
     return f"data:{mt};base64,{base64.b64encode(path.read_bytes()).decode('ascii')}"
 
@@ -104,28 +114,54 @@ def segment(image: Path, concept: str, ledger: Ledger | None = None) -> dict:
 
 # ----------------------------------------------------------------------------- Muse Spark
 
-def spark_json(prompt: str, images: list[Path] | None = None, schema: dict | None = None,
-               ledger: Ledger | None = None, purpose: str = "assess", max_tokens: int = 1800,
-               reasoning_effort: str | None = None) -> dict:
+def spark_json(prompt, images: list[Path] | None = None, schema: dict | None = None,
+               ledger: Ledger | None = None, purpose: str = "assess", max_tokens: int | None = None,
+               reasoning_effort: str | None = None, prefix: str | None = None, thought: str | None = None) -> dict:
     """Vision + structured JSON from Muse Spark through the chat completions surface."""
     ledger = ledger or Ledger()
-    content: list[dict] = [{"type": "text", "text": prompt}]
+    max_tokens = max_tokens or int(__import__("os").environ.get("MARKSWEEP_MAX_TOKENS", "3000"))
+    content: list[dict] = []
+    if isinstance(prompt, (list, tuple)):  # ordered parts: str = text, Path = image
+        for part in prompt:
+            if isinstance(part, Path):
+                content.append({"type": "image_url", "image_url": {"url": data_url(part)}})
+            else:
+                content.append({"type": "text", "text": str(part)})
+    else:
+        content.append({"type": "text", "text": prompt})
     for p in images or []:
         content.append({"type": "image_url", "image_url": {"url": data_url(p)}})
-    kwargs: dict[str, Any] = {"model": config.SPARK_MODEL,
-                              "messages": [{"role": "user", "content": content}],
-                              "max_tokens": max_tokens}
-    if schema:
+    messages: list[dict] = [{"role": "user", "content": content}]
+    prefilled = False
+    if config.prefill_reasoning():
+        # Muse Glimmer's template always opens a thinking channel. A prefilled, closed channel plus the first
+        # characters of the answer make the model continue the JSON at once instead of deliberating for minutes.
+        messages.append({"role": "assistant", "content": prefix or "",
+                         "reasoning_content": thought or "The instructions are clear and the schema is fixed. Answer directly with the JSON."})
+        prefilled = bool(prefix)
+    kwargs: dict[str, Any] = {"model": config.SPARK_MODEL, "messages": messages, "max_tokens": max_tokens}
+    if prefilled:
+        pass  # the continuation cannot be grammar-constrained; the prefix is re-attached before parsing
+    elif schema:
         kwargs["response_format"] = {"type": "json_schema",
                                      "json_schema": {"name": "marksweep", "schema": schema, "strict": False}}
     else:
         kwargs["response_format"] = {"type": "json_object"}
+    reasoning_effort = reasoning_effort or __import__("os").environ.get("MARKSWEEP_REASONING", "low" if not config.prefill_reasoning() else "")
     if reasoning_effort:
         kwargs["reasoning_effort"] = reasoning_effort
     with ledger.call(config.SPARK_MODEL, purpose, images=len(images or [])) as entry:
         resp = _client().chat.completions.create(**kwargs)
         ledger.usage(entry, resp)
         text = resp.choices[0].message.content or ""
+        if not text.strip():
+            raise RuntimeError(f"empty answer after {getattr(resp.usage, 'completion_tokens', '?')} tokens (reasoning used the budget?)")
+        if prefilled and not text.lstrip().startswith(prefix.lstrip()[:1]):
+            text = prefix + text
+        entry["raw"] = text[:1500]
+        t = getattr(resp, "timings", None) or (resp.model_extra or {}).get("timings") if hasattr(resp, "model_extra") else None
+        if t:
+            entry["timings"] = {k: t.get(k) for k in ("prompt_n", "predicted_n", "prompt_per_second", "predicted_per_second")}
         return _loads(text)
 
 
@@ -179,17 +215,21 @@ def segment_vlm(image: Path, concept: str, ledger: Ledger | None = None, size: t
             size = im.size
     w, h = size
     prompt = (f"Find every \"{concept}\" in this photograph. Return JSON {{\"elements\": [{{\"label\", \"kind\", \"box\"}}]}} "
-              f"where box is [left, top, right, bottom] as fractions of the image width and height (0 to 1), tight around "
+              f"where box is [left, top, right, bottom] on a 0 to 1000 grid in which 1000 is the longer side of the image, tight around "
               f"the element. Include every instance, even partly hidden or small ones. Nothing else.")
-    out = spark_json(prompt, [image], GROUND_SCHEMA, ledger, purpose="ground", max_tokens=1200)
+    out = spark_json(prompt, [image], GROUND_SCHEMA, ledger, purpose="ground", prefix='{"elements": [{"label": "',
+                     thought="I look over the whole photograph and list every logo, brand name and repeating pattern I can see, "
+                             "each with a tight box as fractions of width and height.")
     boxes = []
     for i, e in enumerate(out.get("elements") or [], 1):
         try:
             l, t, r, b = [float(x) for x in e["box"]]
         except Exception:  # noqa: BLE001
             continue
-        if max(l, t, r, b) > 1.5:  # model answered in pixels
-            l, t, r, b = l / w, t / h, r / w, b / h
+        if max(l, t, r, b) > 1.5:  # model answered on a grid where the longer side is 1000 (or in pixels of the sent image)
+            m = max(w, h)
+            scale = 1000.0 if max(l, t, r, b) <= 1000.5 else float(m)
+            l, t, r, b = [v * m / scale / (w if i % 2 == 0 else h) for i, v in enumerate((l, t, r, b))]
         boxes.append({"object_id": str(i), "left": l * w, "top": t * h, "right": r * w, "bottom": b * h,
                       "confidence": None, "label": e.get("label"), "kind": e.get("kind")})
     return {"concept": concept, "outcome": "completed", "media": {"width": w, "height": h}, "boxes": boxes,

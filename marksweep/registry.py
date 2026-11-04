@@ -78,3 +78,28 @@ def public() -> list[dict]:
     return [{"id": k, "name": v["name"], "short": v["short"], "jurisdictions": v["jurisdictions"],
              "marks": [{k2: m[k2] for k2 in ("id", "mark", "office", "number", "classes", "type", "fame", "image", "url")}
                        for m in v["marks"]]} for k, v in CLIENTS.items()]
+
+
+def mark_sheet(c: dict, out_dir: Path | None = None) -> Path:
+    """One labelled contact sheet of the client's register drawings (numbered as in digest())."""
+    from PIL import Image, ImageDraw, ImageOps
+    out_dir = out_dir or (config.data_dir() / "sheets")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out = out_dir / f"{c['short'].lower()}-marks.jpg"
+    if out.exists():
+        return out
+    tiles = []
+    for i, m in enumerate(c["marks"], 1):
+        im = Image.open(marks_dir() / m["image"]).convert("RGB")
+        im = ImageOps.contain(im, (360, 300))
+        tile = Image.new("RGB", (400, 360), "white")
+        tile.paste(im, ((400 - im.width) // 2, 20 + (300 - im.height) // 2))
+        d = ImageDraw.Draw(tile)
+        d.text((12, 8), f"{i}. {m['office']} {m['number']}", fill="black")
+        d.text((12, 336), m["mark"][:48], fill="black")
+        tiles.append(tile)
+    sheet = Image.new("RGB", (400 * len(tiles), 360), "white")
+    for i, t in enumerate(tiles):
+        sheet.paste(t, (400 * i, 0))
+    sheet.save(out, "JPEG", quality=90)
+    return out

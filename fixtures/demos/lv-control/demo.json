@@ -1,1 +1,154 @@
-{"client": "lv", "title": "Control: another house's monogram", "goods": "clutch bags and a wallet", "jurisdictions": "United States", "notes": "Three monogram items seized by customs. The pattern is a different house's interlocking-letter motif; expected outcome for the LV client is low concern on every element."}
+{
+ "client": "lv",
+ "title": "Control: another house's monogram",
+ "goods": "clutch bags and a wallet",
+ "jurisdictions": "United States",
+ "notes": "Three monogram items seized by customs. The pattern is a different house's interlocking-letter motif; expected outcome for the LV client is low concern on every element.",
+ "recorded_from": "20261104-232601-116447",
+ "models": {
+  "segment": "sam-3.1",
+  "assess": "muse-spark-1.3"
+ },
+ "boxes": [
+  {
+   "left": 7,
+   "top": 398,
+   "right": 953,
+   "bottom": 502,
+   "concept": "repeating pattern on a bag",
+   "label": "repeating pattern on a bag",
+   "kind": null,
+   "object_id": "1",
+   "confidence": null
+  },
+  {
+   "left": 1010,
+   "top": 411,
+   "right": 1828,
+   "bottom": 498,
+   "concept": "repeating pattern on a bag",
+   "label": "repeating pattern on a bag",
+   "kind": null,
+   "object_id": "2",
+   "confidence": null
+  },
+  {
+   "left": 43,
+   "top": 578,
+   "right": 949,
+   "bottom": 927,
+   "concept": "repeating pattern on a bag",
+   "label": "repeating pattern on a bag",
+   "kind": null,
+   "object_id": "3",
+   "confidence": null
+  },
+  {
+   "left": 1159,
+   "top": 583,
+   "right": 1797,
+   "bottom": 867,
+   "concept": "repeating pattern on a bag",
+   "label": "repeating pattern on a bag",
+   "kind": null,
+   "object_id": "4",
+   "confidence": null
+  },
+  {
+   "left": 412,
+   "top": 606,
+   "right": 602,
+   "bottom": 807,
+   "concept": "brand logo",
+   "label": "brand logo",
+   "kind": null,
+   "object_id": "5",
+   "confidence": null
+  },
+  {
+   "left": 608,
+   "top": 613,
+   "right": 1389,
+   "bottom": 1057,
+   "concept": "repeating pattern on a bag",
+   "label": "repeating pattern on a bag",
+   "kind": null,
+   "object_id": "6",
+   "confidence": null
+  }
+ ],
+ "ledger": [
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 2540,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 2320,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 6285,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 9170,
+   "prompt_tokens": 1654,
+   "completion_tokens": 957,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 8283,
+   "prompt_tokens": 1603,
+   "completion_tokens": 1021,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 8484,
+   "prompt_tokens": 2014,
+   "completion_tokens": 1063,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 10160,
+   "prompt_tokens": 1836,
+   "completion_tokens": 1084,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 9278,
+   "prompt_tokens": 2683,
+   "completion_tokens": 1069,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 10023,
+   "prompt_tokens": 2159,
+   "completion_tokens": 1232,
+   "timings": null
+  }
+ ]
+}

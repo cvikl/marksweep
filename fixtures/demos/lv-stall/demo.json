@@ -1,1 +1,59 @@
-{"client": "lv", "title": "Seized handbag, monogram canvas", "goods": "handbags", "jurisdictions": "United States, Hong Kong", "notes": "Single bag photographed on a table at a customs facility after seizure."}
+{
+ "client": "lv",
+ "title": "Seized handbag, monogram canvas",
+ "goods": "handbags",
+ "jurisdictions": "United States, Hong Kong",
+ "notes": "Single bag photographed on a table at a customs facility after seizure.",
+ "recorded_from": "20261104-232441-fadc68",
+ "models": {
+  "segment": "sam-3.1",
+  "assess": "muse-spark-1.3"
+ },
+ "boxes": [
+  {
+   "left": 8,
+   "top": 11,
+   "right": 1920,
+   "bottom": 1065,
+   "concept": "repeating pattern on a bag",
+   "label": "repeating pattern on a bag",
+   "kind": null,
+   "object_id": "1",
+   "confidence": null
+  }
+ ],
+ "ledger": [
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 2654,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 1837,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 5091,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 12342,
+   "prompt_tokens": 4090,
+   "completion_tokens": 1315,
+   "timings": null
+  }
+ ]
+}

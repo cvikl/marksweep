@@ -36,16 +36,20 @@ def load_fixture(name: str) -> dict | None:
     if not (d / "sam.json").exists():
         return None
     sam = json.loads((d / "sam.json").read_text())
+    meta = json.loads((d / "demo.json").read_text()) if (d / "demo.json").exists() else {}
     return {"segment": {r["concept"]: r for r in sam}, "assess": json.loads((d / "assess.json").read_text()),
-            "meta": json.loads((d / "demo.json").read_text()) if (d / "demo.json").exists() else {}}
+            "boxes": meta.get("boxes") or [], "meta": meta}
 
 
 def record_fixture(name: str, photo: Path, sam_results: list[dict], assessments: list[dict], meta: dict) -> Path:
     d = demos_dir() / name
     d.mkdir(parents=True, exist_ok=True)
     import shutil
-    shutil.copy(photo, d / ("photo" + photo.suffix.lower()))
+    if photo.resolve() != (d / ("photo" + photo.suffix.lower())).resolve():
+        shutil.copy(photo, d / ("photo" + photo.suffix.lower()))
     (d / "sam.json").write_text(json.dumps(sam_results, indent=1))
     (d / "assess.json").write_text(json.dumps(assessments, indent=1, ensure_ascii=False))
-    (d / "demo.json").write_text(json.dumps(meta, indent=1, ensure_ascii=False))
+    existing = json.loads((d / "demo.json").read_text()) if (d / "demo.json").exists() else {}
+    existing.update(meta)
+    (d / "demo.json").write_text(json.dumps(existing, indent=1, ensure_ascii=False))
     return d

@@ -1,9 +1,17 @@
 # Marksweep
 
-**Field enforcement for trademark lawyers, on the Meta Model API.** An investigator photographs a market stall, a shop
-shelf or an online listing. SAM 3.1 isolates every logo, label and pattern. Muse Spark reads each one next to the
+**Field enforcement for trademark lawyers, on Meta's models.** An investigator photographs a market stall, a shop
+window or an online listing. A Meta vision model finds every logo, label and pattern, then reads each one next to the
 client's registered marks and scores the six questions of the likelihood-of-confusion global assessment. The result is
 a hashed evidence record with crops, rationales and a ledger of every model call. The lawyer decides.
+
+Two model routes, chosen by configuration:
+
+- **Open weights, on the investigator's own machine (what the demo runs).** Muse Glimmer 30B (Apache 2.0,
+  `meta-models/Muse-Glimmer-30B-GGUF`) served by llama.cpp on a laptop CPU does both jobs: grounding (boxes for every
+  mark in the photo) and assessment. Client photos never leave the firm. `scripts/glimmer-server.sh`.
+- **Meta Model API.** SAM 3.1 for segmentation with lossless masks and Muse Spark 1.3 for assessment, `MARKSWEEP_SEGMENTER=sam`
+  and the default base URL. Same code, same record format.
 
 Built for the [Meta Global AI Developer Hackathon](https://cerebralvalley.ai/e/meta-ai-developer-hackathon) (Cerebral
 Valley, 26 Oct to 4 Nov 2026), Startups track, theme Build for Your World. Live: https://meta.vantapointlabs.com
@@ -15,10 +23,10 @@ Valley, 26 Oct to 4 Nov 2026), Startups track, theme Build for Your World. Live:
 
 | Step | What happens | Model |
 |---|---|---|
-| **Segment** | Three short noun phrases ("brand logo", "printed brand name", "repeating pattern on a bag") go to SAM 3.1 with the photo. Every box and lossless mask comes back with a stable object id. Boxes are merged across phrases (IoU 0.6) and cut from the original photo with 12% padding. | `sam-3.1`, Responses API, streamed, decoded with `meta_sam_parser` |
-| **Assess** | Each crop is sent with the office drawings of the client's registered marks. The model returns schema-checked JSON: what it sees, the text it reads, candidate client marks, six sub-scores with rationales, a narrative in "highly concerning / worth checking / low concern" language, the single most relevant registration. | `muse-spark-1.3`, chat completions, vision, `response_format: json_schema` |
+| **Segment** | Open-weights route: one grounding call asks the vision model for the box of every "brand logo, printed brand name, or repeating monogram pattern" as fractions of the image. API route: three short noun phrases go to SAM 3.1 with the photo and every box and lossless mask comes back with a stable object id. Either way boxes are merged (IoU 0.6) and cut from the original photo with 12% padding; each crop is hashed. | `muse-glimmer-30B` (local) or `sam-3.1` (Responses API, streamed, decoded with `meta_sam_parser`) |
+| **Assess** | Each crop is sent with the office drawings of the client's registered marks (a numbered contact sheet on the local route, the separate drawings on the API route). The model returns schema-checked JSON: what it sees, the text it reads, candidate client marks, six sub-scores with rationales, a narrative in "highly concerning / worth checking / low concern" language, the single most relevant registration. | `muse-glimmer-30B` (local) or `muse-spark-1.3`, chat completions, vision, `response_format: json_schema` |
 | **Record** | Photo hash, crop hashes, boxes, masks, scores, rationales, field notes and the model ledger (model, purpose, latency, tokens) in one JSON per sweep, served read-only with click-through links to USPTO TSDR, EUIPO eSearch and WIPO Madrid Monitor. | none |
-| **Demo scenes** | The stall and shelf photos in `fixtures/demos/` are synthetic, so no real seller is pictured. | `muse-image-1.0` |
+| **Demo photos** | Four freely licensed photographs (public-domain customs seizures and a CC BY-SA shop window), sources in `fixtures/demos/SOURCES.md`; no seller is identified. | none |
 
 The six dimensions and their weights are the ones Signum uses (visual 0.30, aural 0.10, conceptual 0.15, goods and
 services 0.15, distinctiveness 0.15, imitation signals 0.15). The roll-up is a weighted mean with not-applicable
@@ -29,7 +37,9 @@ narrative says the element is not the client's concern. Nothing here is a legal 
 
 ```bash
 uv venv && uv pip install -e ".[dev]"            # Python 3.11+
-cp .env.example .env                              # MODEL_API_KEY from https://dev.meta.ai (API keys)
+cp .env.example .env                              # local Glimmer (default below) or MODEL_API_KEY from https://dev.meta.ai
+scripts/glimmer-server.sh &                       # llama.cpp + Muse Glimmer 30B GGUF on :8080 (see the script for the weights)
+.venv/bin/marksweep ping                          # one tiny call to whichever model is configured
 .venv/bin/marksweep serve                         # http://localhost:8000
 .venv/bin/marksweep sweep photo.jpg --client lego --goods "brick sets" --jurisdictions "Hong Kong"
 .venv/bin/marksweep sweep photo.jpg --client lego --demo lego-stall     # replay a recorded run, no key needed

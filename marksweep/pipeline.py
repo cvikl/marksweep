@@ -22,6 +22,7 @@ from .ledger import Ledger
 from .scoring import DIMENSIONS, band_for, roll_up
 
 CONCEPTS = ["brand logo", "printed brand name", "repeating pattern on a bag"]
+VLM_CONCEPT = "brand logo, printed brand name, or repeating monogram pattern"
 
 ASSESS_SCHEMA = {
     "type": "object",
@@ -89,47 +90,36 @@ def crop(photo: Image.Image, box: dict, out: Path, pad: float = 0.12) -> Path:
     return out
 
 
-def assess_prompt(client: dict, element_index: int, n_elements: int, context: dict) -> str:
+def assess_prefix(client: dict, context: dict) -> str:
     marks = registry.digest(client)
-    return f"""You are the assessment engine of Marksweep, assisting (not replacing) an IP enforcement
-lawyer. The FIRST image is one element cut out of a photograph taken in the field (a market stall, shop
-shelf or online listing). The images AFTER it are the official register drawings of the client's marks,
-in the order listed below. Compare the element with the client's registered marks only.
+    return f"""You are the assessment engine of Marksweep, assisting (not replacing) an IP enforcement lawyer.
+ACTING FOR: {client["name"]} ({client["short"]}), enforcement matter. Jurisdictions: {context.get("jurisdictions") or client.get("jurisdictions")}.
+Goods seen: {context.get("goods") or "not stated"}. Field notes: {context.get("notes") or "(none)"}.
 
-ACTING FOR: {client["name"]} ({client["short"]}), enforcement matter. Jurisdictions in scope: {context.get("jurisdictions") or client.get("jurisdictions")}.
-Field notes from the investigator: {context.get("notes") or "(none)"}. Goods seen: {context.get("goods") or "not stated"}.
-
-CLIENT MARKS (register image follows the element image, same order):
+CLIENT MARKS (the next image is a numbered contact sheet of their official register drawings):
 {marks}
 
-Element {element_index} of {n_elements}. First say what you actually see ("seen", one sentence, no legal
-words) and transcribe any text ("text_read"). Then list the client mark ids that the element could be
-confused with ("candidate_marks", [] if the element has nothing to do with the client's marks).
+You will then get ONE element cut out of a photograph taken in the field. Compare it with the client's marks only.
+Return ONLY JSON with these keys:
+- "seen": what the element shows, one sentence, no legal words
+- "text_read": any text visible on it, or ""
+- "candidate_marks": list of client mark ids the element could be confused with, [] if none
+- "sub_scores": for each of visual, aural, conceptual, goods_services, distinctiveness, bad_faith an object
+  {{"score": 0-100 (0 no concern, 100 maximal), "rationale": one sentence, "na": true only for aural when purely figurative}}
+  visual = the specific get-up against the closest client mark (sharing only a genus such as any red square or any flower is low, <= 35);
+  aural = word elements against the client's word marks; conceptual = the idea conveyed; goods_services = goods seen against
+  the matched marks' Nice classes; distinctiveness = reputation of the matched mark, only when a mark is meaningfully similar,
+  else <= 25; bad_faith = signs of deliberate imitation (altered letters that keep the look, copied trade dress with a changed name).
+- "narrative": 2 or 3 sentences for a lawyer using "highly concerning", "worth checking" or "low concern"; never "infringes"; no em dashes
+- "primary_match": one client mark id or ""
+If "candidate_marks" is empty, every score must be <= 25 and the narrative must say the element is not the client's concern."""
 
-Score each dimension 0-100 (0 = no concern, 100 = maximal concern) with a one or two sentence rationale
-grounded only in what is visible and the register data above; never invent registrations:
-1. "visual": line structure, proportions, arrangement, colourway, dominant elements against the closest
-   client mark, comparing the SPECIFIC get-up. Sharing only a genus (any red square, any flower, any
-   checkerboard) is low (<= 35). A near copy of the specific device is high.
-2. "aural": phonetic similarity of any word element to the client's word marks; "na": true when the
-   element is purely figurative.
-3. "conceptual": the idea conveyed; commonplace ideas count for little; the same specific stylised
-   concept counts for much.
-4. "goods_services": proximity of the goods seen to the Nice classes of the matched client marks;
-   identical goods high, neighbouring moderate, distant low unless the mark's fame makes free riding
-   plausible and the sign is close.
-5. "distinctiveness": reputation of the MATCHED client mark; only when a client mark is meaningfully
-   similar (visual or conceptual > 35). If nothing matches, <= 25 and say so.
-6. "bad_faith": signs of deliberate imitation visible in the element itself (altered letters that keep
-   the look, "LEPIN" for LEGO style substitutions, copied trade dress with a changed name). Low if none.
 
-If "candidate_marks" is empty, every score must be <= 25 and the narrative must say the element is not
-the client's concern. Never write "infringes" or any legal conclusion; use "highly concerning", "worth
-checking" or "low concern", pending the lawyer's view. No em dashes.
-
-Return ONLY JSON matching the schema: seen, text_read, candidate_marks, sub_scores (visual, aural,
-conceptual, goods_services, distinctiveness, bad_faith each with score, rationale, na), narrative
-(2 to 4 sentences), primary_match (one client mark id or "")."""
+def assess_prompt(client: dict, element_index: int, n_elements: int, context: dict) -> list:
+    """Ordered parts: static prefix + mark sheet first (same for every element, so the server reuses its KV cache),
+    then the short per-element text and the crop."""
+    return [assess_prefix(client, context), registry.mark_sheet(client),
+            f"Element {element_index} of {n_elements}. Assess the following image and return the JSON."]
 
 
 def run_sweep(photo_path: Path, client_id: str, context: dict | None = None, data_dir: Path | None = None,
@@ -161,7 +151,7 @@ def run_sweep(photo_path: Path, client_id: str, context: dict | None = None, dat
         "elements": [], "status": "running",
     }
 
-    concepts = concepts or CONCEPTS
+    concepts = concepts or (CONCEPTS if (fixture or config.segmenter() == "sam") else [VLM_CONCEPT])
     sam_results = []
     for concept in concepts:
         say("segment", {"concept": concept})
@@ -178,13 +168,19 @@ def run_sweep(photo_path: Path, client_id: str, context: dict | None = None, dat
     (sdir / "sam.json").write_text(json.dumps(sam_results, indent=1))
 
     boxes = merge_boxes(sam_results, photo.width, photo.height)
+    if fixture and fixture.get("boxes"):  # replay exactly the elements that were assessed when the fixture was recorded
+        boxes = [dict(b) for b in fixture["boxes"]]
+    max_el = 0 if fixture else int(__import__("os").environ.get("MARKSWEEP_MAX_ELEMENTS", "0") or 0)
+    if max_el and len(boxes) > max_el:
+        boxes = sorted(boxes, key=lambda b: -(b["right"] - b["left"]) * (b["bottom"] - b["top"]))[:max_el]
+        boxes.sort(key=lambda r: (r["top"] // 50, r["left"]))
     say("elements", {"count": len(boxes)})
 
     mark_images = registry.mark_images(client)
     for i, box in enumerate(boxes, 1):
         cpath = crop(photo, box, sdir / "crops" / f"element-{i:02d}.jpg")
         el = {"index": i, "box": {k: box[k] for k in ("left", "top", "right", "bottom")},
-              "found_as": box["concept"], "sam_confidence": box.get("confidence"),
+              "found_as": box.get("label") or box.get("concept"), "kind": box.get("kind"), "sam_confidence": box.get("confidence"),
               "crop": f"crops/{cpath.name}", "crop_sha256": sha256(cpath)}
         say("assess", {"index": i, "of": len(boxes)})
         try:
@@ -193,8 +189,15 @@ def run_sweep(photo_path: Path, client_id: str, context: dict | None = None, dat
                 with ledger.call(config.SPARK_MODEL, "assess", replay=True):
                     pass
             else:
-                out = meta.spark_json(assess_prompt(client, i, len(boxes), context), [cpath, *mark_images],
-                                      ASSESS_SCHEMA, ledger, purpose="assess")
+                parts = assess_prompt(client, i, len(boxes), context)
+                if config.segmenter() == "sam":  # API route: separate drawings instead of the sheet
+                    parts = [parts[0].replace("the next image is a numbered contact sheet of their official register drawings",
+                                              "the following images are their official register drawings, in this order"),
+                             *mark_images, parts[2]]
+                out = meta.spark_json(parts, [cpath], ASSESS_SCHEMA, ledger, purpose="assess",
+                                      max_tokens=int(__import__("os").environ.get("MARKSWEEP_ASSESS_TOKENS", "3000")),
+                                      prefix='{"seen": "', thought="I compare this element with the numbered client marks on the sheet "
+                                      "and fill every key of the JSON with honest scores and one-sentence reasons.")
             el.update(_normalise(out))
         except Exception as exc:  # noqa: BLE001
             el["error"] = f"{type(exc).__name__}: {exc}"[:300]

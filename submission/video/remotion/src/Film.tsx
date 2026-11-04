@@ -7,7 +7,7 @@ import { End } from "./scenes/End";
 import { Upload, Segment, Assess, Record, Control, Ledger } from "./scenes/Shots";
 
 // narration block durations (s), from ffprobe on public/voice-0N.wav
-const V = [20.53, 10.84, 18.81, 23.53, 21.74, 11.93, 19.07, 17.74];
+const V = [26.93, 10.84, 18.81, 23.53, 21.74, 11.93, 19.07, 17.74];
 const tail = 0.5;
 export const scenes: { voice: number; dur: number; el: React.ReactNode }[] = [
   { voice: 1, dur: V[0] + tail, el: <Title /> },

@@ -1,7 +1,7 @@
 # Marksweep, Cerebral Valley submission text (draft, 4 Nov 2026)
 
 **Project name:** Marksweep
-**Tagline:** A photo from the market stall in, a trademark evidence record out. SAM 3.1 finds every mark, Muse Spark assesses it against the client's registrations, the lawyer decides.
+**Tagline:** Google Lens tells you what a logo is. Marksweep tells a lawyer why it might be infringing: a score, a reason, and a chain of evidence. A photo from the market stall in, a trademark evidence record out.
 **Track:** Startups. **Theme:** Build for Your World.
 **Live:** https://meta.vantapointlabs.com  **Repo:** https://github.com/cvikl/marksweep  **Video:** (link)
 

@@ -1,1 +1,97 @@
-{"client": "lv", "title": "Customs seizure, mixed goods", "goods": "sneakers, handbags, pouches", "jurisdictions": "United States", "notes": "Officer opening a seized case: monogram-print high-top sneakers marked Off-Louis, a monogram tote, a quilted pouch. Photographed at the port."}
+{
+ "client": "lv",
+ "title": "Customs seizure, mixed goods",
+ "goods": "sneakers, handbags, pouches",
+ "jurisdictions": "United States",
+ "notes": "Officer opening a seized case: monogram-print high-top sneakers marked Off-Louis, a monogram tote, a quilted pouch. Photographed at the port.",
+ "recorded_from": "20261104-232504-ae83c5",
+ "models": {
+  "segment": "sam-3.1",
+  "assess": "muse-spark-1.3"
+ },
+ "boxes": [
+  {
+   "left": 266,
+   "top": 403,
+   "right": 413,
+   "bottom": 480,
+   "concept": "printed brand name",
+   "label": "printed brand name",
+   "kind": null,
+   "object_id": "1",
+   "confidence": null
+  },
+  {
+   "left": 1207,
+   "top": 701,
+   "right": 1784,
+   "bottom": 1280,
+   "concept": "repeating pattern on a bag",
+   "label": "repeating pattern on a bag",
+   "kind": null,
+   "object_id": "2",
+   "confidence": null
+  },
+  {
+   "left": 325,
+   "top": 1108,
+   "right": 406,
+   "bottom": 1280,
+   "concept": "printed brand name",
+   "label": "printed brand name",
+   "kind": null,
+   "object_id": "3",
+   "confidence": null
+  }
+ ],
+ "ledger": [
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 2406,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 1769,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 3016,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 12939,
+   "prompt_tokens": 2143,
+   "completion_tokens": 1421,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 16377,
+   "prompt_tokens": 2034,
+   "completion_tokens": 1757,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 19808,
+   "prompt_tokens": 2162,
+   "completion_tokens": 2092,
+   "timings": null
+  }
+ ]
+}

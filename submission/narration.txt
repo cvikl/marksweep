@@ -1,5 +1,5 @@
 1. Title
-Brand owners lose the fight against copies at the stall, not in court. An investigator photographs a market, a shop window, a shelf. Then someone sorts hundreds of photos by hand, and nothing records which mark was compared with which, or why. This is Marksweep: a photo from the field in, a trademark evidence record out.
+An investigator comes back from a Hong Kong market with two hundred photos. Each one needs a note, a score and a link to the register, and someone types them by hand. Nothing records which mark was compared with which, or why. Google Lens tells you what a logo is. Marksweep tells a lawyer why it might be infringing: a score, a reason, and a chain of evidence. A photo from the field in, a trademark evidence record out.
 
 2. Upload
 We are acting for a brand owner. The investigator picks the photo, picks the client, writes two lines of field notes: what goods, which jurisdiction. Press run.

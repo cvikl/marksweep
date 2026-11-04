@@ -1,0 +1,236 @@
+[
+ {
+  "seen": "A beige woven strip with repeating dark interlocking oval logos mounted above pink trim on a zippered pouch.",
+  "text_read": "",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 20,
+    "rationale": "Double oval interlocking shapes look different from LV letters and flower device.",
+    "na": false
+   },
+   "aural": {
+    "score": 0,
+    "rationale": "No readable words are present to compare with LV word marks.",
+    "na": true
+   },
+   "conceptual": {
+    "score": 15,
+    "rationale": "The idea conveyed is a rival interlocking monogram, not LV imagery.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Bags could overlap Nice classes but without LV similarity there is no concern.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No LV mark is meaningfully similar so LV reputation is not engaged.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 10,
+    "rationale": "The pattern suggests a different house motif rather than deliberate copying of LV.",
+    "na": false
+   }
+  },
+  "narrative": "The motif is a different house interlocked double oval monogram on a bag and is low concern for LV. No LV flower, LV letters, LV canvas, or LOUIS VUITTON wording is present, so the element is not the client's concern.",
+  "primary_match": ""
+ },
+ {
+  "seen": "The crop shows a bag edge with pink trim and a black band bearing a repeating interlocking-letter pattern.",
+  "text_read": "",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 20,
+    "rationale": "The small repeating interlocked shapes do not share the LV flower or LV letters get-up.",
+    "na": false
+   },
+   "aural": {
+    "score": 0,
+    "rationale": "No readable word element is present to compare to the LOUIS VUITTON word mark.",
+    "na": true
+   },
+   "conceptual": {
+    "score": 15,
+    "rationale": "The idea conveyed is a rival interlocking monogram band, not the LV floral canvas concept.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 15,
+    "rationale": "Without a matching LV mark, the bag goods alone create no LV concern in this assessment.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No meaningful similarity to an LV mark exists so reputation does not raise concern.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 10,
+    "rationale": "The pattern suggests a different house motif rather than a deliberate imitation of LV.",
+    "na": false
+   }
+  },
+  "narrative": "This element is low concern for LV and is not the client's concern. The repeating interlocked motif points to a different house rather than the LV flower or LV letters. No LV enforcement follow up is suggested for this crop.",
+  "primary_match": ""
+ },
+ {
+  "seen": "The crop shows a beige clutch with pink trim and repeating dark motifs next to a brown embossed wallet.",
+  "text_read": "",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 15,
+    "rationale": "The repeating interlocked shapes look different from the LV flower, LV letters and canvas.",
+    "na": false
+   },
+   "aural": {
+    "score": 0,
+    "rationale": "No readable words are present to compare with the client word mark.",
+    "na": true
+   },
+   "conceptual": {
+    "score": 10,
+    "rationale": "The idea is a different brand monogram pattern, not an LV flower or letters concept.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Bags and wallets overlap in type with Class 18 but no similar mark is present.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No LV mark is meaningfully similar so reputation does not create concern here.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 10,
+    "rationale": "The motif follows a different house style with no imitation of LV devices.",
+    "na": false
+   }
+  },
+  "narrative": "This pattern with repeating interlocked shapes is low concern for LV as it points to a different house motif. The visual details do not align with the LV flower, letters or canvas. This element is not the client's concern and requires no action for LV.",
+  "primary_match": ""
+ },
+ {
+  "seen": "A tan wallet with a repeating interlocking motif sits in front of a black clutch with pink trim, a diamond lattice pattern and a round medallion.",
+  "text_read": "",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 15,
+    "rationale": "The interlocking GG style motif and diamond lattice share no specific get-up with the LV flower, LV letters or LV canvas.",
+    "na": false
+   },
+   "aural": {
+    "score": 0,
+    "rationale": "No legible word element is visible to compare against LOUIS VUITTON.",
+    "na": true
+   },
+   "conceptual": {
+    "score": 10,
+    "rationale": "The idea conveyed is a different house monogram pattern, not the LV flower or LV letters concept.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Although bags overlap leather goods generally, no matched LV mark creates any class concern here.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No LV mark is meaningfully similar so no LV reputation is engaged.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 10,
+    "rationale": "The get-up suggests a different house motif rather than deliberate imitation of LV.",
+    "na": false
+   }
+  },
+  "narrative": "This element is low concern for LV and is not the client's concern. The repeating interlocking motif and diamond pattern point to a different house rather than any LV flower, letters or canvas. No further action for LV is warranted on this crop.",
+  "primary_match": ""
+ },
+ {
+  "seen": "A blurry circular emblem with a pink rim and red shapes inside set against a patterned background.",
+  "text_read": "",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 15,
+    "rationale": "The blurry round pink rimmed emblem shares no specific LV flower or LV interlocking letters get-up.",
+    "na": false
+   },
+   "aural": {
+    "score": 5,
+    "rationale": "No legible word element is visible to compare with the LOUIS VUITTON word mark.",
+    "na": true
+   },
+   "conceptual": {
+    "score": 15,
+    "rationale": "The idea conveyed is a different house emblem, not the LV monogram flower or LV initials concept.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "Without a similar mark, the clutch bag and wallet goods alone create no LV concern.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No LV mark is meaningfully similar here so reputation does not increase concern.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 15,
+    "rationale": "No altered LV letters or copied LV trade dress is evident in this blurry emblem.",
+    "na": false
+   }
+  },
+  "narrative": "This element is low concern for LV and is not the client's concern. The motif appears to be a different house interlocking-letter emblem rather than the LV flower or LV letters, so no follow up for LV is suggested.",
+  "primary_match": ""
+ },
+ {
+  "seen": "A glossy brown zip wallet covered in an embossed repeating interlocking motif sits in front of patterned bags.",
+  "text_read": "",
+  "candidate_marks": [],
+  "sub_scores": {
+   "visual": {
+    "score": 15,
+    "rationale": "The rounded interlocking shapes differ from LV letters, flower and canvas.",
+    "na": false
+   },
+   "aural": {
+    "score": 0,
+    "rationale": "No readable words are present to compare with LV word marks.",
+    "na": true
+   },
+   "conceptual": {
+    "score": 15,
+    "rationale": "The concept is a different luxury house monogram pattern, not LV imagery.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 20,
+    "rationale": "No candidate LV mark is matched so no class overlap supports concern.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 10,
+    "rationale": "No LV mark is meaningfully similar so no LV reputation is engaged.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 10,
+    "rationale": "No alteration of LV letters or copying of LV canvas is visible.",
+    "na": false
+   }
+  },
+  "narrative": "This element is low concern and is not the client's concern. The embossed interlocking motif points to a different house rather than LV. No further action for LV is indicated on this wallet.",
+  "primary_match": ""
+ }
+]

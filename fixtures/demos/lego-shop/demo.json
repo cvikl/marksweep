@@ -1,1 +1,154 @@
-{"client": "lego", "title": "Souvenir shop window, brick sets", "goods": "building-brick toy sets in boxes", "jurisdictions": "European Union", "notes": "Shop window photographed from the street, boxes stacked on two shelves, prices on yellow labels."}
+{
+ "client": "lego",
+ "title": "lego-shop",
+ "notes": "Shop window photographed from the street, boxes stacked on two shelves, prices on yellow labels.",
+ "goods": "building-brick toy sets in boxes",
+ "jurisdictions": "European Union",
+ "recorded_from": "20261104-232335-d9cc3a",
+ "models": {
+  "segment": "sam-3.1",
+  "assess": "muse-spark-1.3"
+ },
+ "boxes": [
+  {
+   "left": 460,
+   "top": 306,
+   "right": 683,
+   "bottom": 385,
+   "concept": "brand logo",
+   "label": "brand logo",
+   "kind": null,
+   "object_id": "1",
+   "confidence": null
+  },
+  {
+   "left": 1028,
+   "top": 401,
+   "right": 1109,
+   "bottom": 624,
+   "concept": "brand logo",
+   "label": "brand logo",
+   "kind": null,
+   "object_id": "2",
+   "confidence": null
+  },
+  {
+   "left": 193,
+   "top": 599,
+   "right": 318,
+   "bottom": 651,
+   "concept": "printed brand name",
+   "label": "printed brand name",
+   "kind": null,
+   "object_id": "3",
+   "confidence": null
+  },
+  {
+   "left": 1761,
+   "top": 648,
+   "right": 1865,
+   "bottom": 707,
+   "concept": "printed brand name",
+   "label": "printed brand name",
+   "kind": null,
+   "object_id": "4",
+   "confidence": null
+  },
+  {
+   "left": 130,
+   "top": 958,
+   "right": 375,
+   "bottom": 1049,
+   "concept": "brand logo",
+   "label": "brand logo",
+   "kind": null,
+   "object_id": "5",
+   "confidence": null
+  },
+  {
+   "left": 644,
+   "top": 1064,
+   "right": 675,
+   "bottom": 1273,
+   "concept": "printed brand name",
+   "label": "printed brand name",
+   "kind": null,
+   "object_id": "6",
+   "confidence": null
+  }
+ ],
+ "ledger": [
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 2924,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 1615,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "sam-3.1",
+   "purpose": "segment",
+   "ms": 1650,
+   "prompt_tokens": null,
+   "completion_tokens": null,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 10528,
+   "prompt_tokens": 2014,
+   "completion_tokens": 1134,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 10013,
+   "prompt_tokens": 2014,
+   "completion_tokens": 1143,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 9162,
+   "prompt_tokens": 2527,
+   "completion_tokens": 1126,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 10398,
+   "prompt_tokens": 2764,
+   "completion_tokens": 1186,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 9435,
+   "prompt_tokens": 2031,
+   "completion_tokens": 1014,
+   "timings": null
+  },
+  {
+   "model": "muse-spark-1.3",
+   "purpose": "assess",
+   "ms": 9009,
+   "prompt_tokens": 1996,
+   "completion_tokens": 1010,
+   "timings": null
+  }
+ ]
+}

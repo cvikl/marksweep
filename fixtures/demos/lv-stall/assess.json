@@ -1,0 +1,45 @@
+[
+ {
+  "seen": "A brown handbag covered in a repeating pattern of LV letters, four petal flowers and diamond shapes with a large outlined LV on the front.",
+  "text_read": "LV",
+  "candidate_marks": [
+   "lv_monogram_canvas_uspto_1770131",
+   "lv_letters_uspto_1938808",
+   "lv_flower_em_000311985"
+  ],
+  "sub_scores": {
+   "visual": {
+    "score": 92,
+    "rationale": "The repeating LV, flower and quatrefoil pattern closely replicates the monogram canvas.",
+    "na": false
+   },
+   "aural": {
+    "score": 45,
+    "rationale": "The LV lettering reads as the initials of LOUIS VUITTON when spoken.",
+    "na": false
+   },
+   "conceptual": {
+    "score": 90,
+    "rationale": "The element conveys the same luxury monogram canvas idea as the client marks.",
+    "na": false
+   },
+   "goods_services": {
+    "score": 95,
+    "rationale": "Handbags fall directly within Nice class 18 covered by the flower and word marks.",
+    "na": false
+   },
+   "distinctiveness": {
+    "score": 95,
+    "rationale": "The matched monogram marks have exceptional reputation which increases confusion risk.",
+    "na": false
+   },
+   "bad_faith": {
+    "score": 88,
+    "rationale": "The dense copying of the canvas with an added oversized LV suggests deliberate imitation of the house get up.",
+    "na": false
+   }
+  },
+  "narrative": "This handbag bears a repeating brown pattern of LV letters with four petal flowers and quatrefoils plus a large outlined LV across the front. The close copying of the monogram canvas and devices on identical handbag goods with marks of exceptional reputation is highly concerning and merits prompt enforcement review.",
+  "primary_match": "lv_monogram_canvas_uspto_1770131"
+ }
+]
