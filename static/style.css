@@ -160,7 +160,10 @@ td.n{font-family:var(--mono);font-size:13px;white-space:nowrap;font-variant-nume
 /* team */
 .team{display:grid;gap:0;border-top:1px solid var(--rule)}
 @media (min-width:900px){.team{grid-template-columns:1fr 1fr}.person+.person{border-left:1px solid var(--rule-soft);padding-left:32px}.person:first-child{padding-right:32px}}
-.person{padding:22px 0 26px;border-bottom:1px solid var(--rule-soft)}
+.person{padding:26px 0 30px;border-bottom:1px solid var(--rule-soft);display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;align-items:start}
+.portrait{width:150px;height:188px;object-fit:cover;border-radius:4px;border:1px solid var(--rule);box-shadow:0 14px 30px -20px rgba(23,21,15,.5)}
+.person ul{margin:0 0 12px;padding-left:18px;color:var(--ink-2);font-size:14.5px;line-height:1.5}.person li{margin:3px 0}
+@media (max-width:560px){.person{grid-template-columns:1fr}.portrait{width:120px;height:150px}}
 .person h3{font:500 22px/1.2 var(--serif);margin:0 0 4px}
 .person .role{margin:0 0 10px;color:var(--ink);font-weight:500;font-size:15px}
 .person p{margin:0 0 10px;color:var(--ink-2);font-size:15px;max-width:58ch}
