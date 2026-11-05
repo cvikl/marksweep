@@ -4,40 +4,40 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/style.css"></head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="/">Marksweep<small>field enforcement on the Meta Model API</small></a><span class="meta" id="mode"></span></div></header>
+<header class="top"><div class="wrap"><a class="brand" href="/">Marksweep<small>field enforcement, on Meta's models</small></a><span class="meta" id="mode"></span></div></header>
 <main class="wrap">
 <h1>A photo from the market stall in, an evidence record out.</h1>
 <p class="lead">The investigator photographs the stall, shelf or listing. SAM 3.1 isolates every logo, label and pattern. Muse Spark reads each one against the client's registered marks and scores the six global-assessment questions. The record keeps the hashes, the crops, the rationales and every model call. The lawyer decides.</p>
 
 <div class="grid side">
 <section class="card" data-shot="form">
-  <h3>1. The photo</h3>
+  <h2 class="fh">1 · The photo</h2>
   <div class="demos" id="demos" data-shot="demos"></div>
-  <p class="note" id="demohint">Recorded sweeps replay instantly; your own photo runs live.</p>
-  <div class="drop" id="drop"><input type="file" id="file" accept="image/*" hidden><span id="droptext">or drop your own photo here (jpg, png, webp, under 12 MB)</span></div>
-  <h3>2. Acting for</h3>
+  <p class="note" id="demohint" style="margin:10px 0 0">Recorded sweeps replay instantly. Your own photo runs live.</p>
+  <div class="drop" id="drop"><input type="file" id="file" accept="image/*" hidden><span id="droptext">Or drop your own photo (jpg, png or webp, under 12 MB)</span></div>
+  <h2 class="fh">2 · Acting for</h2>
   <select id="client" data-shot="client"></select>
   <div class="marks" id="marks" data-shot="marks"></div>
-  <h3 data-shot="notes">3. Field notes</h3>
+  <h2 class="fh" data-shot="notes">3 · Field notes</h2>
   <label>Goods seen</label><input type="text" id="goods" placeholder="e.g. handbags and wallets on a street stall">
   <label>Jurisdictions in scope</label><input type="text" id="juris" placeholder="e.g. Hong Kong">
   <label>Notes</label><textarea id="notes" placeholder="Where, when, what the seller said"></textarea>
   <p style="margin-top:18px"><button id="run" data-shot="run">Run the sweep</button> <span class="note" id="runnote"></span></p>
 </section>
 <aside>
-  <h3>Run log</h3>
-  <div class="log" id="log" data-shot="log">Waiting.</div>
-  <h3>Recent records</h3>
+  <h2 class="fh">Run log</h2>
+  <div class="log" id="log" data-shot="log">Waiting for a run.</div>
+  <h2 class="fh">Recent records</h2>
   <div class="list" id="recent"></div>
 </aside>
 </div>
 
 <h2>How it works</h2>
-<div class="grid two">
-<div class="card"><h3>Segment</h3><p><b>SAM 3.1</b> (Meta Model API, Responses API, streamed) is asked three short noun phrases, "brand logo", "printed brand name", "repeating pattern on a bag". Every box and lossless mask comes back with a stable object id; boxes are merged across phrases and cut from the original photo. No model picks what to look at; the segmenter finds everything that looks like a mark.</p></div>
-<div class="card"><h3>Assess</h3><p><b>Muse Spark 1.3</b> sees each crop next to the office drawings of the client's registered marks and returns schema-checked JSON: what it sees, the text it reads, which client marks are candidates, six sub-scores with rationales (visual, aural, conceptual, goods, distinctiveness, imitation signals), a narrative in "highly concerning / worth checking / low concern" language, never a legal conclusion.</p></div>
-<div class="card"><h3>Record</h3><p>Photo hash, crop hashes, boxes, masks, scores, rationales and the ledger of every model call (model, purpose, latency, tokens) in one JSON file per sweep, served read-only. The roll-up is a weighted mean with N/A weights redistributed, same bands as Signum, our case-assessment product: red at 65, amber at 40.</p></div>
-<div class="card"><h3>What it is not</h3><p>Not a verdict. The register entries are the only comparison; the scores are research signals for the lawyer's own global assessment. The two demo clients use publicly registered marks; the demo photos are public-domain customs seizure photographs and a CC BY-SA shop window, no seller is identified.</p></div>
+<div class="steps">
+<div class="step"><h3>Segment</h3><p><b>SAM 3.1</b> (Meta Model API, Responses API, streamed) is asked three short noun phrases, "brand logo", "printed brand name", "repeating pattern on a bag". Every box and lossless mask comes back with a stable object id; boxes are merged across phrases and cut from the original photo. No model picks what to look at; the segmenter finds everything that looks like a mark.</p></div>
+<div class="step"><h3>Assess</h3><p><b>Muse Spark 1.3</b> sees each crop next to the office drawings of the client's registered marks and returns schema-checked JSON: what it sees, the text it reads, which client marks are candidates, six sub-scores with rationales (visual, aural, conceptual, goods, distinctiveness, imitation signals), a narrative in "highly concerning / worth checking / low concern" language, never a legal conclusion.</p></div>
+<div class="step"><h3>Record</h3><p>Photo hash, crop hashes, boxes, masks, scores, rationales and the ledger of every model call (model, purpose, latency, tokens) in one JSON file per sweep, served read-only. The roll-up is a weighted mean with N/A weights redistributed, same bands as Signum, our case-assessment product: red at 65, amber at 40.</p></div>
+<div class="step"><h3>What it is not</h3><p>Not a verdict. The register entries are the only comparison; the scores are research signals for the lawyer's own global assessment. The two demo clients use publicly registered marks; the demo photos are public-domain customs seizure photographs and a CC BY-SA shop window, no seller is identified.</p></div>
 </div>
 <footer>Marksweep is the field-intake module of <a href="https://vantapointlabs.com">Signum</a>, built for the Meta Global AI Developer Hackathon, 4 Nov 2026. All model inference: Meta Model API (api.meta.ai). <a href="https://github.com/cvikl/marksweep">Source</a>.</footer>
 </main>
@@ -65,7 +65,7 @@ $('#run').onclick=async()=>{
   if(file)fd.append('photo',file);else if(demo){const b=await (await fetch(`/static/demos/${demo}/`+document.querySelector(`.demo[data-n="${demo}"] img`).src.split('/').pop())).blob();fd.append('photo',new File([b],'photo.jpg',{type:b.type}));fd.append('demo',demo)}else{$('#runnote').textContent='Pick a demo photo or drop your own.';return}
   fd.append('client',$('#client').value);fd.append('goods',$('#goods').value);fd.append('jurisdictions',$('#juris').value);fd.append('notes',$('#notes').value);
   const tok=new URLSearchParams(location.search).get('token');if(tok)fd.append('token',tok);
-  $('#run').disabled=true;$('#runnote').textContent='';$('#log').textContent='Waiting.';
+  $('#run').disabled=true;$('#runnote').textContent='';$('#log').textContent='Waiting for a run.';
   try{const {job}=await j('/api/sweeps'+(tok?`?token=${encodeURIComponent(tok)}`:''),{method:'POST',body:fd});
     const es=new EventSource(`/api/jobs/${job}/events`);
     es.onmessage=ev=>{const d=JSON.parse(ev.data);const t=new Date().toLocaleTimeString([],{hour12:false});

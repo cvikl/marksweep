@@ -11,7 +11,7 @@ const page = await browser.newPage();
 await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'light' }]);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 for (const s of shots) {
-  await page.setViewport({ width: 1920, height: s.height ?? 1080, deviceScaleFactor: 1 });
+  await page.setViewport({ width: s.width ?? 1920, height: s.height ?? 1080, deviceScaleFactor: 1 });
   await page.goto(base + s.path, { waitUntil: 'networkidle0', timeout: 60000 });
   await sleep(s.wait ?? 1500);
   for (const step of s.steps ?? []) {
@@ -22,7 +22,7 @@ for (const s of shots) {
   }
   // grow the viewport to the whole page so every image is decoded before the capture
   const fullH = await page.evaluate(() => document.documentElement.scrollHeight);
-  await page.setViewport({ width: 1920, height: Math.min(fullH, 6000), deviceScaleFactor: 1 });
+  await page.setViewport({ width: s.width ?? 1920, height: Math.min(fullH, 6000), deviceScaleFactor: 1 });
   await page.evaluate(async () => { await Promise.all([...document.images].map((i) => i.decode().catch(() => {}))); });
   await sleep(1200);
   await page.screenshot({ path: OUT + s.name + '.png', fullPage: s.full ?? true });
