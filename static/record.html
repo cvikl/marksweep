@@ -1,41 +1,51 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Marksweep record</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/static/style.css"></head>
 <body>
-<header class="top"><div class="wrap"><a class="brand" href="/">Marksweep<small>evidence record</small></a><span class="meta" id="mode"></span></div></header>
-<main class="wrap" id="main"><p class="note">Loading.</p></main>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/">Marksweep</a>
+  <nav class="nav"><a href="/#run">Run a sweep</a><a href="/#records">Records</a><a href="/#how">How it works</a><span class="meta" id="mode"></span></nav>
+</div></header>
+<main class="wrap record" id="main"><p class="note" style="padding:40px 0">Loading the record.</p></main>
+<footer class="wrap"><span>Scores are research signals for the supervising lawyer's own global assessment (Sabel v Puma line), never a legal conclusion.</span><span>Register links open the office record on USPTO TSDR, EUIPO eSearch or WIPO Madrid Monitor.</span></footer>
 <script>
 const $=s=>document.querySelector(s);const id=location.pathname.split('/').pop();
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 const LABEL={red:'Highly concerning',amber:'Worth checking',green:'Low concern',unscored:'Not assessed'};
+const SHORT={red:'highly concerning',amber:'worth checking',green:'low concern'};
 (async()=>{
   const r=await (await fetch('/api/sweeps/'+id)).json();const cl=(await (await fetch('/api/clients')).json()).find(c=>c.id===r.client.id)||{marks:[]};
   $('#mode').textContent=`${r.mode} · ${r.models.segment} + ${r.models.assess}`;
-  const f=n=>`/api/sweeps/${r.id}/file/${n}`;const W=r.photo.width,H=r.photo.height;
-  const boxes=r.elements.map(e=>`<div class="box ${e.band||''}" data-shot="box-${e.index}" style="left:${e.box.left/W*100}%;top:${e.box.top/H*100}%;width:${(e.box.right-e.box.left)/W*100}%;height:${(e.box.bottom-e.box.top)/H*100}%"><span>${e.index}${e.score!=null?' · '+e.score:''}</span></div>`).join('');
-  const s=r.summary||{};const hi=s.highest;
+  const f=n=>`/api/sweeps/${r.id}/file/${n}`;const W=r.photo.width,H=r.photo.height;const s=r.summary||{};const b=s.bands||{};
+  const boxes=r.elements.map(e=>`<a class="box ${e.band||''}" href="#e${e.index}" data-shot="box-${e.index}" style="left:${e.box.left/W*100}%;top:${e.box.top/H*100}%;width:${(e.box.right-e.box.left)/W*100}%;height:${(e.box.bottom-e.box.top)/H*100}%"><i>${e.index}${e.score!=null?' · '+e.score:''}</i></a>`).join('');
+  const mark=cid=>{const m=cl.marks.find(x=>x.id===cid);return m?`<a class="mk" href="${m.url}" target="_blank" rel="noopener" title="${esc(m.mark)} · ${esc(m.office)} ${esc(m.number)}"><img src="/marks/${m.image}" alt="${esc(m.mark)}"><span>${esc(m.office)} ${esc(m.number)}</span></a>`:`<span class="mk">${esc(cid)}</span>`};
   const els=r.elements.map(e=>{
-    const bd=(e.breakdown||[]).map(b=>`<tr><td>${esc(b.label)}</td><td class="n">${b.na?'n/a':b.score}</td><td><div class="bar"><i style="width:${b.na?0:b.score}%"></i></div></td><td>${esc(b.rationale)}</td></tr>`).join('');
-    const cands=(e.candidate_marks||[]).map(cid=>{const m=cl.marks.find(x=>x.id===cid);return m?`<a href="${m.url}" target="_blank" rel="noopener"><img src="/marks/${m.image}" alt="" title="${esc(m.mark)} ${esc(m.office)} ${esc(m.number)}"></a>`:esc(cid)}).join(' ');
-    return `<section class="el" id="e${e.index}" data-shot="element-${e.index}"><div><img class="crop" src="${f(e.crop)}" alt="Crop of element ${e.index}"><div class="kv" style="margin-top:6px">found as "${esc(e.found_as)}"<br>sha256 ${esc((e.crop_sha256||'').slice(0,16))}…</div></div>
-    <div><div class="hd"><span class="score">${e.score??'–'}</span><span class="band ${e.band||''}">${LABEL[e.band]||e.band||''}</span><b>Element ${e.index}</b>${e.text_read?`<span class="kv">reads "${esc(e.text_read)}"</span>`:''}</div>
-    <p class="seen">${esc(e.seen||e.error||'')}</p>
-    ${cands?`<div class="cands">${cands}</div>`:''}
-    <p>${esc(e.narrative||'')}</p>
-    ${bd?`<details data-shot="breakdown-${e.index}"><summary>Six questions, weighted mean ${e.score}</summary><div class="tbl"><table><tr><th>Dimension</th><th>Score</th><th></th><th>Rationale (Muse Spark)</th></tr>${bd}</table></div></details>`:''}</div></section>`}).join('');
+    const rows=(e.breakdown||[]).map(x=>`<div class="q ${x.na?'na':''}"><span class="q-l">${esc(x.label)}</span><span class="q-n">${x.na?'n/a':x.score}</span><span class="q-bar"><i style="width:${x.na?0:x.score}%"></i></span><span class="q-r">${esc(x.rationale)}</span></div>`).join('');
+    return `<article class="el" id="e${e.index}" data-shot="element-${e.index}">
+      <div class="el-crop"><img class="crop" src="${f(e.crop)}" alt="Crop of element ${e.index}"><div class="kv">found as "${esc(e.found_as)}"<br>sha256 ${esc((e.crop_sha256||'').slice(0,20))}…</div></div>
+      <div class="el-body">
+        <div class="el-hd"><span class="score">${e.score??'–'}</span><span class="band ${e.band||''}">${LABEL[e.band]||e.band||''}</span><span class="el-n">Element ${e.index}</span>${e.text_read?`<span class="reads">reads "${esc(e.text_read)}"</span>`:''}</div>
+        <p class="seen">${esc(e.seen||e.error||'')}</p>
+        ${(e.candidate_marks||[]).length?`<div class="cands">${e.candidate_marks.map(mark).join('')}</div>`:''}
+        <p class="narr">${esc(e.narrative||'')}</p>
+        ${rows?`<div class="qs" data-shot="breakdown-${e.index}">${rows}</div>`:''}
+      </div></article>`}).join('');
   const led=(r.ledger||[]).map(l=>`<tr><td class="n">${esc(l.model)}</td><td>${esc(l.purpose)}${l.concept?` "${esc(l.concept)}"`:''}${l.replay?' (replayed)':''}</td><td class="n">${l.ms} ms</td><td class="n">${l.input_tokens??l.prompt_tokens??''}${(l.output_tokens??l.completion_tokens)!=null?' / '+(l.output_tokens??l.completion_tokens):''}${l.objects!=null?l.objects+' obj':''}</td><td class="n">${esc(l.status)}</td></tr>`).join('');
+  const verdict=s.elements?`${s.elements} element${s.elements===1?'':'s'} found. `+['red','amber','green'].filter(k=>b[k]).map(k=>`${b[k]} ${SHORT[k]}`).join(', ')+'.':'Nothing that looks like a mark was found.';
   $('#main').innerHTML=`
-  <h1 data-shot="headline">${esc(r.client.name)}: ${s.elements||0} element${s.elements===1?'':'s'}, ${s.bands?.red||0} highly concerning, ${s.bands?.amber||0} worth checking, ${s.bands?.green||0} low concern.</h1>
-  <p class="lead">Sweep ${esc(r.id)} · ${esc(r.created)} · ${esc(r.context?.jurisdictions||'')} ${r.context?.goods?'· goods: '+esc(r.context.goods):''}</p>
-  <div class="grid side"><div class="photo" data-shot="photo"><img src="${f(r.photo.file)}" alt="">${boxes}</div>
-  <div class="card" data-shot="recordcard"><h2 class="fh">Record</h2><div class="kv"><b>photo sha256</b><br>${esc(r.photo.sha256)}<br><br><b>${r.photo.width}×${r.photo.height} px</b> · ${r.elements.length} crops hashed · ${r.mode} run<br><br><b>segment</b> ${esc(r.models.segment)}<br><b>assess</b> ${esc(r.models.assess)}</div>
-  ${r.context?.notes?`<h2 class="fh">Field notes</h2><p style="font-size:14px">${esc(r.context.notes)}</p>`:''}
-  <h2 class="fh">Client marks compared</h2><div class="marks">${cl.marks.map(m=>`<figure><a href="${m.url}" target="_blank" rel="noopener"><img src="/marks/${m.image}" alt=""></a><figcaption>${esc(m.office)} ${esc(m.number)}</figcaption></figure>`).join('')}</div>
-  <p class="note" style="margin-top:14px"><a href="/api/sweeps/${r.id}">record.json</a></p></div></div>
+  <div class="rec-top"><a class="back" href="/#records">← Records</a><span class="meta">Sweep ${esc(r.id)} · ${esc(r.created.replace('T',' ').slice(0,16))} UTC · ${esc(r.mode)} run</span></div>
+  <h1 data-shot="headline">${esc(r.client.name)}<span class="h1-sub">${esc(verdict)}</span></h1>
+  <p class="lead">${esc(r.context?.jurisdictions||'')}${r.context?.goods?' · goods seen: '+esc(r.context.goods):''}${r.context?.notes?' · '+esc(r.context.notes):''}</p>
+  <div class="photo" data-shot="photo"><img src="${f(r.photo.file)}" alt="The field photo with every element boxed">${boxes}</div>
+  <div class="legend"><span><i class="dot red"></i>highly concerning, 65 and above</span><span><i class="dot amber"></i>worth checking, 40 to 65</span><span><i class="dot green"></i>low concern</span><span class="note">Click a box to jump to its element.</span></div>
+  <div class="recmeta" data-shot="recordcard">
+    <div><h2 class="fh">Record</h2><div class="kv"><b>photo sha256</b><br>${esc(r.photo.sha256)}<br><b>${r.photo.width}×${r.photo.height} px</b> · ${r.elements.length} crops hashed · <a href="/api/sweeps/${r.id}">record.json</a></div></div>
+    <div><h2 class="fh">Models</h2><div class="kv"><b>segment</b> ${esc(r.models.segment)}<br><b>assess</b> ${esc(r.models.assess)}<br>${(r.ledger||[]).length} calls · ${Math.round((r.ledger||[]).reduce((a,l)=>a+(l.ms||0),0)/1000)} s</div></div>
+    <div><h2 class="fh">Client marks compared</h2><div class="marks">${cl.marks.map(m=>`<figure><a href="${m.url}" target="_blank" rel="noopener" title="${esc(m.mark)}"><img src="/marks/${m.image}" alt="${esc(m.mark)}"></a><figcaption>${esc(m.office)} ${esc(m.number)}</figcaption></figure>`).join('')}</div></div>
+  </div>
   <h2 data-shot="elements-h">Elements</h2>${els||'<p class="note">SAM 3.1 found nothing that looks like a mark.</p>'}
-  <h2 data-shot="ledger-h">Model ledger</h2><div class="tbl"><table data-shot="ledger"><tr><th>Model</th><th>Call</th><th>Latency</th><th>Tokens in / out</th><th></th></tr>${led}</table></div>
-  <footer>Scores are research signals for the supervising lawyer's own global assessment (Sabel v Puma line), never a legal conclusion. Register links go to USPTO TSDR, EUIPO eSearch and WIPO Madrid Monitor.</footer>`;
+  <h2 data-shot="ledger-h">Model ledger</h2><div class="tbl"><table data-shot="ledger"><tr><th>Model</th><th>Call</th><th>Latency</th><th>Tokens in / out</th><th></th></tr>${led}</table></div>`;
 })();
 </script></body></html>

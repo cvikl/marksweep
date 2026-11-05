@@ -18,6 +18,7 @@ from .fixtures import load_fixture
 
 app = FastAPI(title="Marksweep", version=__version__)
 STATIC = config.root_dir() / "static"
+ASSET_V = str(int(max((STATIC / n).stat().st_mtime for n in ("style.css", "index.html", "record.html"))))
 JOBS: dict[str, dict] = {}
 MAX_UPLOAD = 12 * 1024 * 1024
 
@@ -144,12 +145,12 @@ def demos():
 
 @app.get("/", response_class=HTMLResponse)
 def index():
-    return (STATIC / "index.html").read_text(encoding="utf-8")
+    return (STATIC / "index.html").read_text(encoding="utf-8").replace("style.css\"", f"style.css?v={ASSET_V}\"")
 
 
 @app.get("/sweeps/{sweep_id}", response_class=HTMLResponse)
 def sweep_page(sweep_id: str):
-    return (STATIC / "record.html").read_text(encoding="utf-8")
+    return (STATIC / "record.html").read_text(encoding="utf-8").replace("style.css\"", f"style.css?v={ASSET_V}\"")
 
 
 app.mount("/static/demos", StaticFiles(directory=str(config.fixtures_dir() / "demos")), name="demos")
